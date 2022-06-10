@@ -1,7 +1,7 @@
 DataScience
 ==============================
 
-Project related to the course "Introduction to Data Science for physicists" at the University of Trento
+Progetto sull'analisi dati dei consumi elettrici della provincia di Trento
 
 Project Organization
 ------------
