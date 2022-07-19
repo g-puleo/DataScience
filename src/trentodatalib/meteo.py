@@ -51,4 +51,5 @@ def adjust_wind( x ):
 
 meteo_df[ 'windSpeed' ] = meteo_df[ 'windSpeed' ].apply(adjust_wind)
 meteo_df[ 'windDir' ] = meteo_df[ 'windDir' ].apply(adjust_wind)
+meteo_df
 del temp_df, meteo_rawdata, dati_meteo_json

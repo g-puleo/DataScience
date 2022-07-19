@@ -1,7 +1,10 @@
 from pathlib import Path
 from trentodatalib import trentopaths as tpath
 import pandas as pd
-
+import geopandas as gpd
+import json
+from fiona.crs import from_epsg
+from shapely.geometry import Polygon, Point
 current_path = Path(__file__).parent.resolve()
 df_linee =  pd.read_csv(current_path / tpath.raw_data_path / tpath.filenames['SET-lines'])
 nomi = ['LINESET', 'time', 'consumi']
@@ -26,3 +29,26 @@ df_consumi = pd.merge(left=df_consumi, right=df_linee, on='LINESET', how='outer'
 #per ogni cella sommo i consumi di tutte le linee che vi passano
 df_consumi['consumo_della_cella'] = df_consumi['consumi']/df_consumi['TOT_UBICAZIONI']*df_consumi['NR_UBICAZIONI']
 df_consumi=df_consumi.groupby([ 'SQUAREID','datetime','NR_UBICAZIONI'])['consumo_della_cella'].sum().reset_index()
+
+
+
+
+##importo anche la griglia 
+with open(current_path / tpath.raw_data_path / tpath.filenames['grid']) as f:
+	grid_json=json.load(f)
+
+grid = gpd.GeoDataFrame(grid_json['features'])
+
+#converto la colonna geometry nel formato Polygon di shapely
+grid['geometry'] = grid['geometry'].apply(lambda x:Polygon(x['coordinates'][0]))
+
+#### Questa parte imposta il crs del geoDataFrame ######
+# Import specific function 'from_epsg' from fiona module
+
+# Set the GeoDataFrame's coordinate system to WGS84
+grid.crs = from_epsg(code = 4326)
+
+grid['id'] = grid['properties'].apply(lambda x: x['cellId'])
+grid.drop(columns=['type', 'properties'], inplace=True) 
+
+del df_ubi_per_linea, df_nov, df_dec

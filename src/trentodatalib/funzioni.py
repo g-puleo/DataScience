@@ -1,5 +1,8 @@
 #questo file sarà come una libreria di funzioni editate e scritte da noi 
-
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 def genera_mappa_consumi( datiConsumi, df_linee, grid ):
     ''' Restituisce GeoDataFrame per il plot di una mappa in scala di colore a partire dai dati relativi ai consumi.
         Inputs:
@@ -21,6 +24,7 @@ def genera_mappa_consumi( datiConsumi, df_linee, grid ):
     #contiamo le ubicazioni per linea
     df_ubi_per_line = pd.DataFrame(df_linee.groupby('LINESET')['NR_UBICAZIONI'].sum()).reset_index()
     #contiamo i consumi per linea
+    print(datiConsumi.columns)
     df_con_per_line = pd.DataFrame( datiConsumi.groupby('LINESET')['consumi'].sum() ).reset_index()
     #uniamo i due dataframe
     df_consperub = pd.merge(left = df_con_per_line, right = df_ubi_per_line, how = 'outer',on='LINESET' )

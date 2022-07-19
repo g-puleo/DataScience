@@ -8,8 +8,9 @@ from pathlib  import Path
 from shapely.geometry import Polygon, Point
 
 #ho cambiato il percorso così da lavorare direttamente nella repo
-data_path = Path('.././data/raw')
-data_path2 = Path('.././data/external')
+raw_data_path = Path('.././data/raw')
+ext_data_path = Path('.././data/external')
+
 files = {'grid':'trentino-grid.geojson',
          'adm_reg':'administrative_regions_Trentino.json',        
          'NOV-DATA':'SET-nov-2013.csv',
@@ -26,6 +27,10 @@ with open(data_path / files['grid']) as f:
 
 grid = gpd.GeoDataFrame(grid_json['features'])
 
+#converto la colonna geometry nel formato Polygon di shapely
+grid['geometry'] = grid['geometry'].apply(lambda x:Polygon(x['coordinates'][0]))
+
+
 #consumi sulle linee e dati geografici linee
 nomi = ['LINESET', 'time', 'consumi']
 df_consumi = pd.read_csv(data_path / files['NOV-DATA'], names = nomi)
@@ -35,8 +40,6 @@ df_linee = pd.read_csv(data_path / files['SET-lines'])
 with open(data_path / files['meteo'] ) as file:
     dati_meteo_json = json.load(file)
 
-#converto la colonna geometry nel formato Polygon di shapely
-grid['geometry'] = grid['geometry'].apply(lambda x:Polygon(x['coordinates'][0]))
 
 #### Questa parte imposta il crs del geoDataFrame ######
 # Import specific function 'from_epsg' from fiona module
@@ -46,38 +49,6 @@ grid.crs = from_epsg(code = 4326)
 
 grid['id'] = grid['properties'].apply(lambda x: x['cellId'])
 grid.drop(columns=['type', 'properties'], inplace=True) 
-
-
-
-
-############ IMPORTAZIONE DATI METEO ####################
-meteo_rawdata = pd.DataFrame(dati_meteo_json['features'])
-#convertiamo la colonna geometry nel formato di shapely
-meteo_rawdata['geomPoint.geom'] = meteo_rawdata['geomPoint.geom'].apply(lambda x:Point(x['coordinates']) )
-meteo_rawdata.rename(columns={'geomPoint.geom':'geometry'} , inplace=True) 
-columnlist = meteo_rawdata.columns.tolist()
-meteo_rawdata = meteo_rawdata.melt( id_vars=columnlist[:10]) 
-#aggiusto la colonna degli orari
-meteo_rawdata[['variable', 'rawtime']] = meteo_rawdata['variable'].str.split('.', expand=True) 
-meteo_rawdata['datetime'] = pd.to_datetime( meteo_rawdata['date']+meteo_rawdata['rawtime'], format='%Y-%m-%d%H%M' ) 
-#e butto quelle vecchie
-meteo_rawdata.drop(columns=['rawtime','date'], inplace=True)
-#creo un df temporaneo per riorganizzare la colonna con temperature, vento e precipitazioni
-temp_df = meteo_rawdata[['station', 'datetime', 'variable', 'value']]
-
-#questo pivot() mi permette di ottenere tre distinte colonne con i valori che mi interessano
-temp_df = temp_df.pivot(index=['station', 'datetime'], columns='variable', values='value').reset_index() 
-#unisco il df con le tre nuove colonne a quello con i dati raw
-meteo_df = pd.merge(left=meteo_rawdata, right=temp_df, how='right', on=['station', 'datetime'] ) 
-meteo_df = meteo_df[meteo_df.variable=='temperatures']
-#come ultima cosa separo in due la colonna del vento
-meteo_df[['winds', 'windDir']] =  meteo_df['winds'].str.split('@', expand=True)
-meteo_df.rename(columns={'winds':'windSpeed'}, inplace=True  ) 
-meteo_df.drop(columns=[ 'variable', 'value', 'timestamp' ], inplace=True ) 
-#butto le colonne ora inutili
-meteo_df.reset_index(inplace=True)
-meteo_df.drop(columns='index', inplace=True) 
-
 
 
 df_mappa_stazioni = meteo_df[['station', 'geometry']]
@@ -136,8 +107,7 @@ def categorizza_consumi( df, consumiColName ):
 
 
 meteo_df = categorizza_tempo(meteo_df)
-#volendo rimpiazzare i vuoti con dei NaN, ma per ora non serve
-#meteo_df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
+
 def adjust_wind( x ):
     if type(x)==str:
         if x=='':
