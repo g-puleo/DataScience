@@ -41,6 +41,17 @@ mask = ( pd.to_timedelta(df_consumi['ora'].astype(str).add(':00')).between(pd.Ti
 df_consumidiurni = df_consumi[mask]
 df_consuminotturni = df_consumi[~mask]
 
+################
+# Adesso faccio dei Database per fare un confronto fra i consumi durante il week-end e i giorni infrasettimanali 
+# ho aggiunto una colonna che mi enumera i giorni della settimana 
+df_consumi["giorno"] = pd.to_datetime(df_consumi["giorno"])
+df_consumi["DayOfWeek"] = df_consumi["giorno"].dt.weekday
+# ho aggiunto un altra colonna che mi dice se il giorno è un week end o meno
+df_consumi["isweekend"] = df_consumi["giorno"].dt.weekday > 4
+# creazione di due database filtrando con la condizione sulla colonna DayOfweek molto più comoda di isweekend 
+df_consumisettimana = df_consumi[df_consumi.DayOfWeek < 5]
+df_consumiweekend = df_consumi[df_consumi.DayOfWeek > 4]
+
 
 
 #contiamo le ubicazioni per linea

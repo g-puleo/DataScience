@@ -66,5 +66,26 @@ axes.set_ylim(45.84, 46.2)
 #plt.colorbar(plt.cm.ScalarMappable( norm=ax_consumi_lordi._children[0].norm , cmap='bwr'), ax=axes[0] )
 plt.colorbar(plt.cm.ScalarMappable( norm=ax_consumi_lordi._children[0].norm , cmap='bwr'), ax=axes )
 
+
+# faccio una mappa per vedere la differenza fra i consumi dei giorni infrasettimanali e i week-end
+
+df_mappa_settimana = fz.genera_mappa_consumi( consumi.df_consumisettimana, consumi.df_linee , grid)
+df_mappa_weekend = fz.genera_mappa_consumi( consumi.df_consumiweekend, consumi.df_linee, grid)
+#normalizzo
+Nset = len(consumi.df_consumisettimana.index)
+Ntot = len(consumi.df_consumi.index)
+df_mappa_settimana['consumo_per_cella']/=Nset*144
+df_mappa_weekend['consumo_per_cella']/=(Ntot-Nset)*144
+# ci sono 144 righe ogni giorno (ogni riga è un quarto d'ora)
+df_mappa_diff2 = df_mappa_settimana.copy()
+df_mappa_diff2['consumo_per_cella'] = df_mappa_settimana['consumo_per_cella']-df_mappa_weekend['consumo_per_cella']
+MAX = np.max(np.abs(df_mappa_diff2['consumo_per_cella'] )  ) 
+norm= plt.Normalize( -MAX, MAX )
+axs_diff2 = df_mappa_diff2.plot('consumo_per_cella', cmap='bwr', alpha=0.5, norm=norm) 
+cx.add_basemap(axs_diff2, crs=grid.crs.to_string() )
+
+plt.colorbar(plt.cm.ScalarMappable( norm=ax_consumi_lordi._children[0].norm , cmap='bwr'), ax=axs_diff2 )
+axs_diff2.set_xlim(10.8, 11.5) 
+axs_diff2.set_ylim(45.84, 46.2)
 #plt.savefig("mappaGiornonotte.pdf", bbox_inches='tight' , dpi=300)
 plt.show()
