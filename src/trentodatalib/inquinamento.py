@@ -1,12 +1,15 @@
 from pathlib import Path
 from trentodatalib import trentopaths as tpath
 import pandas as pd
-
-current_path = Path(__file__).parent.resolve()
+from trentodatalib import rawdatabase as rawdata
+from trentodatalib import funzioni as fz
+import numpy as np
+'''current_path = Path(__file__).parent.resolve()
 
 # dati inquinamento
 df_inquinamento= pd.read_csv(current_path/ tpath.ext_data_path / tpath.filenames['inquinamento'] , encoding='latin-1')
-
+'''
+df_inquinamento = rawdata.df_inquinamentoraw.copy()
 dfInqTrento = df_inquinamento[ (df_inquinamento['Stazione'] =='Parco S. Chiara' ) | (df_inquinamento['Stazione'] ==  'Via Bolzano' )]
 #convertiamo in datetime.
 #notiamo che le ore vanno da 1 a 24 mentre vorremmo che andassero da 0 a 23.
@@ -22,7 +25,7 @@ dfInqTrento =  dfInqTrento.pivot(index=[ 'Unità di misura', 'datetime'], column
 #riduco a un solo livello di nomi colonne
 dfInqTrento.columns=[' '.join(col).strip() for col in dfInqTrento.columns.values]
 #divido in fasce orarie
-dfInqTrento=categorizza_tempo(dfInqTrento)
+dfInqTrento=fz.categorizza_tempo(dfInqTrento)
 
 #noto che alcune misure di inquinanti sono salvate in stringhe (errore quando si applica mean() ) 
 #eseguo dunque conversione in float usando .apply. 
