@@ -38,8 +38,8 @@ df_dec   =  pd.read_csv(current_path / tpath.raw_data_path / tpath.filenames['DE
 #unisco dati 
 df_consumiraw = pd.concat([df_nov, df_dec])
 #converto colonna time nel formato di pandas
-df_consumiraw['time'] = pd.to_datetime(df_consumiraw['time'], format='%Y-%m-%d %H:%M')
-df_consumiraw.rename(columns={'time':'datetime'}, inplace=True) 
+##df_consumiraw['time'] = pd.to_datetime(df_consumiraw['time'], format='%Y-%m-%d %H:%M')
+##df_consumiraw.rename(columns={'time':'datetime'}, inplace=True) 
 
 
 
@@ -67,19 +67,19 @@ df_inquinamentoraw= pd.read_csv(current_path/ tpath.ext_data_path / tpath.filena
 with open(current_path / tpath.raw_data_path / tpath.filenames['grid']) as f:
 	grid_json=json.load(f)
 
-grid = gpd.GeoDataFrame(grid_json['features'])
+gridraw = gpd.GeoDataFrame(grid_json['features'])
 
 #converto la colonna geometry nel formato Polygon di shapely
-grid['geometry'] = grid['geometry'].apply(lambda x:Polygon(x['coordinates'][0]))
+gridraw['geometry'] = gridraw['geometry'].apply(lambda x:Polygon(x['coordinates'][0]))
 
 #### Questa parte imposta il crs del geoDataFrame ######
 # Import specific function 'from_epsg' from fiona module
 
 # Set the GeoDataFrame's coordinate system to WGS84
-grid.crs = from_epsg(code = 4326)
+gridraw.crs = from_epsg(code = 4326)
 
-grid['id'] = grid['properties'].apply(lambda x: x['cellId'])
-grid.drop(columns=['type', 'properties'], inplace=True) 
+gridraw['id'] = gridraw['properties'].apply(lambda x: x['cellId'])
+gridraw.drop(columns=['type', 'properties'], inplace=True) 
 
 
 
