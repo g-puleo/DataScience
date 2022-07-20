@@ -3,6 +3,27 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
+#questo file sarà come una libreria di funzioni editate e scritte da noi 
+
+import pandas as pd
+import geopandas as gpd
+from datetime import time, timedelta, date, datetime 
+import contextily as cx
+import numpy as np
+import json
+import numpy as np
+from pathlib  import Path
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+from shapely.geometry import Polygon, Point
+from fiona.crs import from_epsg
+import fiona
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LinearRegression
 def genera_mappa_consumi( datiConsumi, df_linee, grid ):
     ''' Restituisce GeoDataFrame per il plot di una mappa in scala di colore a partire dai dati relativi ai consumi.
         Inputs:
@@ -98,8 +119,8 @@ def addNextDay( dfTN , cols2drop):
     dfTN_xp1 = dfTN.copy()
     
     #preparo per join dei dataframes
-    print('DEBUG')
-    print(dfTN_xp1.iloc[0,:] )
+    #print('DEBUG')
+    #print(dfTN_xp1.iloc[0,:] )
     dfTN_xp1 = dfTN_xp1.drop(labels=0, axis=0).reset_index(drop=True)
     dfTN = dfTN.drop(dfTN.tail(1).index).reset_index(drop=True)
     

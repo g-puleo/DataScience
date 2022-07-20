@@ -54,18 +54,20 @@ axmappastazioni.annotate('T0135', (11.10131, 46.10))
 ## righe preparatorie per fare la mappa 
 gdfLineCells = pd.merge(left=rawdata.gridraw, right=consumi.df_linee, left_on='id', right_on='SQUAREID', how='right').drop(columns='id')
 gdfLineCells[['geometry', 'SQUAREID']].drop_duplicates().reset_index().drop(columns='index')
-#per calcolare il criordiniamoentroide è tecnicamente opportuno trasformare coordinate sferiche in km
+#per calcolare il centroide è tecnicamente opportuno trasformare coordinate sferiche in coordinate chilometriche
 #anche se non dovrebbe fare molta differenza
 gdfLineCells.to_crs(epsg=3035, inplace=True)
 gdfLineCells['centroid'] = gdfLineCells['geometry'].centroid
 df_mappa_stazioni.to_crs(epsg=3035, inplace=True)
 
-#abbasso il livello della programmazione // approccio bruteforce, 
+#abbasso il livello della programmazione per assocciare ad ogni cella la stazione meteo più vicina
+
 #usando df2.geometry.apply(lambda g: df1.distance(g)), probabilmente a causa di errori di arrotondamento
 #la distanza tra alcuni centroidi e alcune stazioni meteo risulta zero.
 
 meteo_stations = list(df_mappa_stazioni['geometry']) 
 cell_centroids = list(gdfLineCells['centroid'] )
+
 #creo array che conterrà gli indici corrispondenti alle stazioni meteo più vicine a ogni centroide
 nearest_ms_to_cells = np.zeros( (len(cell_centroids),) ) 
 for i_cell, pt_cell in enumerate(cell_centroids):
@@ -94,9 +96,6 @@ df_mappa_stazioni.plot(color='blue', ax=axprova)
 cx.add_basemap(axprova, crs=df_mappa_stazioni.crs.to_string() ) 
 #per salvare
 #plt.savefig('mappaStazioniZone.pdf', dpi=400, bbox_inches='tight') 
-#11.13, 46.07
-### l'unica soluzione che mi è venuta in mente al problema è usare direttamente il file delle mappe, per forza, obietivamente se no devo riorganizzare tutta la directory, e ciao 
-
 
 
 

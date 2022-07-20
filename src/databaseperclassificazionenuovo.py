@@ -2,14 +2,14 @@
 from trentodatalib import consumi, meteo, inquinamento 
 from trentodatalib import rawdatabase as rawdata
 from trentodatalib import funzioni as fz 
+from trentodatalib import Mappastazionimeteo 
 
 import pandas as pd
 import geopandas as gpd
-from datetime import time, timedelta, datetime, date 
+from datetime import time, timedelta, datetime, date
 import contextily as cx
 import numpy as np
 import json
-import numpy as np
 from pathlib  import Path
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -22,9 +22,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LinearRegression
-# per evitare eventuali conflitti assegno una copia del database in meteo consumi 
-
-from trentodatalib import Mappastazionimeteo 
 
 # riprendendo il database elaborato nel file meteo consumi e lo sistemo al fine di ottenere dati meteo mediati o sommati sulle fasce orarie 
 #######Domanda queste linee di codice forse è meglio metetrle direttamente in meteo ????
@@ -62,15 +59,15 @@ gdfLineCells['centroid'] = gdfLineCells['geometry'].centroid
 mapsta.df_mappa_stazioni.to_crs(epsg=3035, inplace=True)
 
 '''
-
-
-## putroppo è un casino a sto punto perchè dovrei pescare un database da mappastazioni meteo, e se facessi qui le cose di mappa stazioni meteo dovrei comunque pescarne un altro da lì quindi il problema rimane 
+#per evitare conflitti uso .copy()
 gdfLineCells = Mappastazionimeteo.gdfLineCells.copy()
 meteo_df = meteo.meteo_df.copy()
 df_consumi = consumi.df_consumi.copy()
 df_linee = rawdata.df_lineeraw.copy()
 dfInqTrento = inquinamento.dfInqTrento
+
 ### creo un dataframe con SQUAREID e codici stazioni:
+#gdfLineCells contiene associazioni delle celle alla stazione meteo più vicina 
 df_suddivisione = gdfLineCells[['SQUAREID', 'nearestStation']].drop_duplicates().reset_index().drop(columns='index')
 # unisco dati dei consumi sulle celle con quelli della suddivisione in zone
 # in modo da suddividere i consumi in zone
@@ -102,28 +99,28 @@ dfTrento = df_meteo_consumi[ (df_meteo_consumi['station']=='T0129')
 dfTrentoZone = df_meteo_consumi[  ((df_meteo_consumi['station']=='T0129') | (df_meteo_consumi['station']=='T0135'))
                             & (df_meteo_consumi['isWeekend']==False)  ]       
 
-## adesso devo aggiungere i dati inquinamento di Trento, sono già nel file dell'inquinamento
-#tolgo i weekend
-dfInqTrento_infraset = dfInqTrento[ ~dfInqTrento['isWeekend'] ]
-# finalmente unisco con dati di meteo e consumi per quanto riguarda Trento però
-dfMeteoInqCons = pd.merge( left=dfInqTrento_infraset, right=dfTrento, on=['TimeRange', 'isWeekend', 'date'])
-
-print(dfMeteoInqCons)
+# finalmente unisco con dati di meteo e consumi di Trento
 
 
+dfTrentoZoneDay = dfTrentoZone[ dfTrentoZone['TimeRange'] == 'day' ]
+dfTrentoZoneEv = dfTrentoZone[ dfTrentoZone['TimeRange'] == 'evening' ]
+dfTrentoZoneDay = fz.categorizza_consumi(dfTrentoZoneDay, 'consumoOrarioUbicazione')
+dfTrentoZoneEv = fz.categorizza_consumi(dfTrentoZoneEv, 'consumoOrarioUbicazione')
 
+columns_to_drop2 = ['date_x', 'date_x+1' , 'TimeRange_x', 'isWeekend_x','dayOfWeek_x',
+                      'TimeRange_x+1', 'isWeekend_x+1', 'dayOfWeek_x+1']
 
-
-
-
-
-
-
-
-
-
-
-
+dfTrentoZoneDay['dayOfWeek'] = dfTrentoZoneDay['date'].apply(datetime.weekday)
+print(dfTrentoZoneDay['dayOfWeek'])
+dfTrentoZoneDayA = fz.addNextDay(dfTrentoZoneDay[ dfTrentoZoneDay['station'] == 'T0129'  ].reset_index().drop(columns='index') , columns_to_drop2)
+dfTrentoZoneEvA = fz.addNextDay(dfTrentoZoneEv[ dfTrentoZoneEv['station'] == 'T0129'  ].reset_index().drop(columns='index') , columns_to_drop2)
+dfTrentoZoneDayB = fz.addNextDay(dfTrentoZoneDay[ dfTrentoZoneDay['station'] == 'T0135'  ].reset_index().drop(columns='index') , columns_to_drop2)
+dfTrentoZoneEvB = fz.addNextDay(dfTrentoZoneEv[ dfTrentoZoneEv['station'] == 'T0135'  ].reset_index().drop(columns='index') , columns_to_drop2)
+#print(dfTrentoZoneEv[ dfTrentoZoneEv['station'] == 'T0135'  ].reset_index().drop(columns='index'))
+dfTrentoZoneDay = pd.concat([dfTrentoZoneDayA, dfTrentoZoneDayB])
+dfTrentoZoneEv = pd.concat([dfTrentoZoneEvA, dfTrentoZoneEvB])
+dfFasceOrarie = [dfTrentoZoneDay, dfTrentoZoneEv]
+#plt.show()
 
 
 
