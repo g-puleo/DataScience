@@ -7,7 +7,6 @@ from datetime import time, timedelta, datetime, date
 import contextily as cx
 import numpy as np
 import json
-import numpy as np
 from pathlib  import Path
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -24,14 +23,10 @@ from trentodatalib import rawdatabase as rawdata'''
 from pathlib import Path
 from trentodatalib import trentopaths as tpath 
 from trentodatalib import rawdatabase as rawdata
-import json
 import pandas as pd
 from shapely.geometry import Point
 from trentodatalib import funzioni as fz
 from trentodatalib import meteo, consumi, inquinamento
-
-
-
 
 grid = rawdata.gridraw
 
@@ -41,15 +36,19 @@ df_mappa_stazioni = meteo.meteo_df[['station', 'geometry']]
 #df_mappa_stazioni.drop(columns='index', inplace=True)
 df_mappa_stazioni = gpd.GeoDataFrame(df_mappa_stazioni, crs='EPSG:4326')
 df_mappa_stazioni = df_mappa_stazioni.drop_duplicates().reset_index().drop(columns='index')
-axmappastazioni = df_mappa_stazioni.plot(color='blue') 
-cx.add_basemap(axmappastazioni, crs=df_mappa_stazioni.crs.to_string() ) 
-#grid.plot(ax=axmappastazioni, color='aliceblue', alpha=0.4) 
 
-axmappastazioni.set_xlim(11.0, 11.3)
-axmappastazioni.set_ylim(45.9, 46.2)
+# axmappastazioni = df_mappa_stazioni.plot(color='blue') 
+# cx.add_basemap(axmappastazioni, crs=df_mappa_stazioni.crs.to_string() ) 
+# #grid.plot(ax=axmappastazioni, color='aliceblue', alpha=0.4) 
 
-axmappastazioni.annotate('T0129', (11.13565, 46.08))
-axmappastazioni.annotate('T0135', (11.10131, 46.10))
+# axmappastazioni.set_xlim(11.0, 11.3)
+# axmappastazioni.set_ylim(45.9, 46.2)
+
+# axmappastazioni.annotate('T0129', (11.13565, 46.08))
+# axmappastazioni.annotate('T0135', (11.10131, 46.10))
+
+
+
 #plt.savefig("mappaStazionimeteo.pdf", bbox_inches='tight' , dpi=300)
 ## righe preparatorie per fare la mappa 
 gdfLineCells = pd.merge(left=rawdata.gridraw, right=consumi.df_linee, left_on='id', right_on='SQUAREID', how='right').drop(columns='id')
@@ -57,24 +56,29 @@ gdfLineCells[['geometry', 'SQUAREID']].drop_duplicates().reset_index().drop(colu
 #per calcolare il centroide è tecnicamente opportuno trasformare coordinate sferiche in coordinate chilometriche
 #anche se non dovrebbe fare molta differenza
 gdfLineCells.to_crs(epsg=3035, inplace=True)
-gdfLineCells['centroid'] = gdfLineCells['geometry'].centroid
 df_mappa_stazioni.to_crs(epsg=3035, inplace=True)
 
-#abbasso il livello della programmazione per assocciare ad ogni cella la stazione meteo più vicina
+gdfLineCells['centroid'] = gdfLineCells['geometry'].centroid
 
-#usando df2.geometry.apply(lambda g: df1.distance(g)), probabilmente a causa di errori di arrotondamento
-#la distanza tra alcuni centroidi e alcune stazioni meteo risulta zero.
+#abbasso il livello della programmazione per assocciare ad ogni cella la stazione meteo più vicina
+#probabilmente esistono modi più eleganti di farlo, ma questo funziona.
 
 meteo_stations = list(df_mappa_stazioni['geometry']) 
 cell_centroids = list(gdfLineCells['centroid'] )
 
-#creo array che conterrà gli indici corrispondenti alle stazioni meteo più vicine a ogni centroide
+#questo array conterrà gli indici corrispondenti alle stazioni meteo più vicine a ogni centroide
 nearest_ms_to_cells = np.zeros( (len(cell_centroids),) ) 
+#scorro su tutte le celle del territorio
 for i_cell, pt_cell in enumerate(cell_centroids):
+    #di default imposto come stazione più vicina la prima dell'elenco
     nearest_index = 0
+    #segno anche la sua distanza dal punto centrale della cella i_cell
     nearest_distance = pt_cell.distance(meteo_stations[nearest_index])
+    #scorro tutte le stazioni misurando le loro distanze dalla cella i_cell
     for i_st, pt_st in enumerate(meteo_stations):
         current_distance = pt_cell.distance(pt_st)
+        #quando trovo una distanza più piccola di tutte quelle che ho visto fin'ora, aggiorno il valore di nearest_distance
+        #e segno anche quale stazione corrisponde a questa distanza
         if current_distance <nearest_distance:
             
             nearest_distance=current_distance
@@ -88,9 +92,18 @@ for i_cell, pt_cell in enumerate(cell_centroids):
 #più vicina alla i-esima cella di territorio (nell'ordine in cui appaiono nei dataframe sopra)
 codelist = [stationcodes[int(nearest_ms_to_cells[ii])] for ii, p in enumerate(nearest_ms_to_cells)]
 gdfLineCells['nearestStation'] = codelist
-
 df_mappa_stazioni.to_crs(epsg=4326, inplace=True)
 gdfLineCells.to_crs(epsg=4326, inplace=True)
+
+
+
+
+
+
+
+
+
+#questo è un semplice plot di prova
 axprova = gdfLineCells.plot('nearestStation', alpha=1)
 df_mappa_stazioni.plot(color='blue', ax=axprova) 
 cx.add_basemap(axprova, crs=df_mappa_stazioni.crs.to_string() ) 

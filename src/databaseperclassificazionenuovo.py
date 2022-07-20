@@ -104,28 +104,38 @@ dfTrentoZone = df_meteo_consumi[  ((df_meteo_consumi['station']=='T0129') | (df_
 
 dfTrentoZoneDay = dfTrentoZone[ dfTrentoZone['TimeRange'] == 'day' ]
 dfTrentoZoneEv = dfTrentoZone[ dfTrentoZone['TimeRange'] == 'evening' ]
+dfTrentoZoneNight = dfTrentoZone[ dfTrentoZone['TimeRange'] == 'night' ]
+
 dfTrentoZoneDay = fz.categorizza_consumi(dfTrentoZoneDay, 'consumoOrarioUbicazione')
 dfTrentoZoneEv = fz.categorizza_consumi(dfTrentoZoneEv, 'consumoOrarioUbicazione')
+dfTrentoZoneNight = fz.categorizza_consumi(dfTrentoZoneNight, 'consumoOrarioUbicazione')
 
+#dopo aver affiancato il giorno x e il giorno x+1 in ogni df, si vuole eliminare queste colonne dai df
 columns_to_drop2 = ['date_x', 'date_x+1' , 'TimeRange_x', 'isWeekend_x','dayOfWeek_x',
                       'TimeRange_x+1', 'isWeekend_x+1', 'dayOfWeek_x+1']
 
-dfTrentoZoneDay['dayOfWeek'] = dfTrentoZoneDay['date'].apply(datetime.weekday)
-print(dfTrentoZoneDay['dayOfWeek'])
+# dfTrentoZoneDay['dayOfWeek'] = dfTrentoZoneDay['date'].apply(datetime.weekday)
+# print(dfTrentoZoneDay['dayOfWeek'])
+
+#dati relativi alla zona A del territorio di Trento
 dfTrentoZoneDayA = fz.addNextDay(dfTrentoZoneDay[ dfTrentoZoneDay['station'] == 'T0129'  ].reset_index().drop(columns='index') , columns_to_drop2)
 dfTrentoZoneEvA = fz.addNextDay(dfTrentoZoneEv[ dfTrentoZoneEv['station'] == 'T0129'  ].reset_index().drop(columns='index') , columns_to_drop2)
+dfTrentoZoneNightA =  fz.addNextDay(dfTrentoZoneNight[ dfTrentoZoneNight['station'] == 'T0129'  ].reset_index().drop(columns='index') , columns_to_drop2)
+
+#dati relativi alla zona B del territorio di Trento
 dfTrentoZoneDayB = fz.addNextDay(dfTrentoZoneDay[ dfTrentoZoneDay['station'] == 'T0135'  ].reset_index().drop(columns='index') , columns_to_drop2)
 dfTrentoZoneEvB = fz.addNextDay(dfTrentoZoneEv[ dfTrentoZoneEv['station'] == 'T0135'  ].reset_index().drop(columns='index') , columns_to_drop2)
-#print(dfTrentoZoneEv[ dfTrentoZoneEv['station'] == 'T0135'  ].reset_index().drop(columns='index'))
-dfTrentoZoneDay = pd.concat([dfTrentoZoneDayA, dfTrentoZoneDayB])
-dfTrentoZoneEv = pd.concat([dfTrentoZoneEvA, dfTrentoZoneEvB])
-dfFasceOrarie = [dfTrentoZoneDay, dfTrentoZoneEv]
-#plt.show()
+dfTrentoZoneNightB =  fz.addNextDay(dfTrentoZoneNight[ dfTrentoZoneNight['station'] == 'T0135'  ].reset_index().drop(columns='index') , columns_to_drop2)
 
+#unisco tutto
+dfTrentoZoneDay = pd.concat([dfTrentoZoneDayA, dfTrentoZoneDayB]).reset_index(drop=True)
+dfTrentoZoneEv = pd.concat([dfTrentoZoneEvA, dfTrentoZoneEvB]).reset_index(drop=True)
+dfTrentoZoneNight = pd.concat([dfTrentoZoneNightA, dfTrentoZoneNightB]).reset_index(drop=True)
 
-
-
-
+#salvo in file esterni usando pickle
+dfTrentoZoneDay.to_pickle("../data/interim/datiTrentoDay.pkl")
+dfTrentoZoneEv.to_pickle("../data/interim/datiTrentoEv.pkl")
+dfTrentoZoneNight.to_pickle("../data/interim/datiTrentoNight.pkl")
 
 
 
