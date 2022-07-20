@@ -39,7 +39,7 @@ meteo_df.drop(columns=[ 'variable', 'value', 'timestamp' ], inplace=True )
 #butto le colonne ora inutili
 meteo_df.reset_index(inplace=True)
 meteo_df.drop(columns='index', inplace=True) 
-
+meteo_df = fz.categorizza_tempo(meteo_df)
 def adjust_wind( x ):
     if type(x)==str:
         if x=='':
@@ -54,4 +54,52 @@ def adjust_wind( x ):
 meteo_df[ 'windSpeed' ] = meteo_df[ 'windSpeed' ].apply(adjust_wind)
 meteo_df[ 'windDir' ] = meteo_df[ 'windDir' ].apply(adjust_wind)
 meteo_df
+
+meanTempGb  = meteo_df.groupby(['station', meteo_df['datetime'].dt.date,'TimeRange']  )['temperatures'].mean() 
+sumPrecipGb = meteo_df.groupby(['station', meteo_df['datetime'].dt.date,'TimeRange']  )['precipitations'].sum() 
+meanWindsGb = meteo_df.groupby(['station', meteo_df['datetime'].dt.date,'TimeRange']  )['windSpeed'].mean()
+
+# unisco in un dataframe e lo aggiusto
+dicttmp = { 'meanTemperature': meanTempGb, 'precipitations': sumPrecipGb, 'meanWinds': meanWindsGb}
+df_tmp_gb = pd.DataFrame(dicttmp).reset_index()
+df_tmp_gb.rename(columns={'datetime':'date'} , inplace=True) 
+
+#voglio unirlo con i dati di geometry, e altri dati giornalieri non usati nel groupby
+df_tmp_tomerge = meteo_df[['station', 'geometry','elevation', 'minTemperature', 'maxTemperature', 'datetime', 'isWeekend', 'TimeRange']]
+#il seguente comando genera una warning ma a quanto pare è un falso positivo. 
+#serve a tenere solo le date e a buttare le ore
+df_tmp_tomerge['date'] =df_tmp_tomerge['datetime'].dt.date
+#togliendo datetime ho un df con un sacco di righe uguali, le butto con .drop_duplicates()
+df_tmp_tomerge.drop(columns='datetime', inplace=True)
+df_tmp_tomerge  = df_tmp_tomerge.loc[df_tmp_tomerge.astype(str).drop_duplicates().index].reset_index()
+df_tmp_tomerge.drop(columns='index', inplace=True)
+#finalmente unisco i due dataframe
+meteo_df = pd.merge(left=df_tmp_tomerge, right=df_tmp_gb, on=['station', 'date', 'TimeRange'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #del temp_df, dati_meteo_json

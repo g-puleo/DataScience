@@ -54,7 +54,7 @@ df_consumiweekend = df_consumi[df_consumi.DayOfWeek > 4]
 
 
 
-#contiamo le ubicazioni per linea
+'''#contiamo le ubicazioni per linea
 df_consumi['time'] = pd.to_datetime(df_consumi['time'], format='%Y-%m-%d %H:%M')
 df_consumi.rename(columns={'time':'datetime'}, inplace=True) 
 df_ubi_per_linea = pd.DataFrame(df_linee.groupby('LINESET')['NR_UBICAZIONI'].sum()).reset_index()
@@ -67,9 +67,60 @@ df_consumi.rename(columns={'NR_UBICAZIONI':'TOT_UBICAZIONI'}, inplace=True )
 df_consumi = pd.merge(left=df_consumi, right=df_linee, on='LINESET', how='outer').dropna()
 #per ogni cella sommo i consumi di tutte le linee che vi passano
 df_consumi['consumo_della_cella'] = df_consumi['consumi']/df_consumi['TOT_UBICAZIONI']*df_consumi['NR_UBICAZIONI']
-df_consumi=df_consumi.groupby([ 'SQUAREID','datetime','NR_UBICAZIONI'])['consumo_della_cella'].sum().reset_index()
+df_consumi=df_consumi.groupby([ 'SQUAREID','datetime','NR_UBICAZIONI'])['consumo_della_cella'].sum().reset_index()'''
 
 ################################################################
+
+#prima aggiusto la colonna time convertendola nel formato di pandas
+df_consumi['time'] = pd.to_datetime(df_consumi['time'], format='%Y-%m-%d %H:%M')
+df_consumi.rename(columns={'time':'datetime'}, inplace=True) 
+#suddivido in categorie di tempi
+df_consumi = fz.categorizza_tempo( df_consumi ) 
+#sommo i consumi fissando linea giorno e fascia oraria
+gb = df_consumi.groupby(['LINESET', df_consumi.datetime.dt.date, 'TimeRange', 'isWeekend'])['consumi'].sum()
+df_consumi = pd.DataFrame(gb).reset_index()
+#contiamo le ubicazioni per linea
+df_ubi_per_linea = pd.DataFrame(df_linee.groupby('LINESET')['NR_UBICAZIONI'].sum()).reset_index()
+df_consumi = pd.merge(left=df_consumi , right=df_ubi_per_linea, on='LINESET', how='left')
+#a questo punto le righe di df_consumi corrispondono solo alle linee che hanno avuto dei consumi cioè le linee
+# che appaiono nel dataframe di consumi iniziale 
+df_consumi.rename(columns={'NR_UBICAZIONI':'TOT_UBICAZIONI'}, inplace=True ) 
+#poiché esistono linee nel df_linee dove non sono registrati consumi in df_consumi,
+#questo mi da dei nan che decido di ignorare completamente
+df_consumi = pd.merge(left=df_consumi, right=df_linee, on='LINESET', how='outer').dropna()
+#per ogni cella sommo i consumi di tutte le linee che vi passano
+df_consumi['consumo_della_cella'] = df_consumi['consumi']/df_consumi['TOT_UBICAZIONI']*df_consumi['NR_UBICAZIONI']
+df_consumi=df_consumi.groupby([ 'SQUAREID','datetime', 'TimeRange', 'isWeekend'])['consumo_della_cella'].sum().reset_index()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ##importo anche la griglia 
