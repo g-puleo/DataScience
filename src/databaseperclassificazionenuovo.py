@@ -69,7 +69,7 @@ gdfLineCells = Mappastazionimeteo.gdfLineCells.copy()
 meteo_df = meteo.meteo_df.copy()
 df_consumi = consumi.df_consumi.copy()
 df_linee = rawdata.df_lineeraw.copy()
-
+dfInqTrento = inquinamento.dfInqTrento
 ### creo un dataframe con SQUAREID e codici stazioni:
 df_suddivisione = gdfLineCells[['SQUAREID', 'nearestStation']].drop_duplicates().reset_index().drop(columns='index')
 # unisco dati dei consumi sulle celle con quelli della suddivisione in zone
@@ -102,10 +102,13 @@ dfTrento = df_meteo_consumi[ (df_meteo_consumi['station']=='T0129')
 dfTrentoZone = df_meteo_consumi[  ((df_meteo_consumi['station']=='T0129') | (df_meteo_consumi['station']=='T0135'))
                             & (df_meteo_consumi['isWeekend']==False)  ]       
 
+## adesso devo aggiungere i dati inquinamento di Trento, sono già nel file dell'inquinamento
+#tolgo i weekend
+dfInqTrento_infraset = dfInqTrento[ ~dfInqTrento['isWeekend'] ]
+# finalmente unisco con dati di meteo e consumi per quanto riguarda Trento però
+dfMeteoInqCons = pd.merge( left=dfInqTrento_infraset, right=dfTrento, on=['TimeRange', 'isWeekend', 'date'])
 
-print(dfTrentoZone)
-
-
+print(dfMeteoInqCons)
 
 
 
