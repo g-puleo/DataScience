@@ -1,17 +1,19 @@
 ## QUESTO SCRIPT ESEGUE I PLOT DELLA MATRICE DI CORRELAZIONE DI INQUINAMENTO METEO E CONSUMI
 ## INOLTRE MOSTRA QUALI SONO I CONSUMI NELLE DIVERSE FASCE ORARIE. (CATEGORIZZAZIONE USANDO QUARTILI)
+
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
-dfTrentoZoneDay = pd.read_pickle("../data/interim/datiTrentoDay.pkl")
-dfTrentoZoneEv = pd.read_pickle("../data/interim/datiTrentoEv.pkl")
-dfTrentoZoneNight = pd.read_pickle("../data/interim/datiTrentoNight.pkl")
+dfTrentoZoneDay = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiTrentoDay.pkl"))
+dfTrentoZoneEv = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiTrentoEv.pkl"))
+dfTrentoZoneNight = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiTrentoNight.pkl"))
 
 dfFasceOrarie = [dfTrentoZoneDay, dfTrentoZoneEv, dfTrentoZoneNight]
 
-########## visuaizzaione della divisione in categorie di consumi in alto medio basso usando i quartili ###########
+########## visuaizzazione della divisione in categorie di consumi in alto medio basso usando i quartili ###########
 def histplotconsumi():
     fig, axs_hist = plt.subplots(2,1, figsize=(9,14))
     fasce = ['giorno (08:00-19:00)', 'sera (19:00-24:00)', 'notte (00:00-08:00)']
@@ -53,25 +55,50 @@ def histplotconsumi():
         axs_hist[kk].set_ylim(ylims)
         axs_hist[kk].set_xlim(xlims)
         axs_hist[kk].set_title(station_names[kk], fontsize=fs+2)
-    
+
+    plt.show()
+    return
 # ### voglio visualizzare la matrice di correlazione anche per scegliere più coscientemente le feaures da dare al classificatore
 
 # #rinomino le colonne per rendere più leggibile il plot della matrice
-# dict_nomicolonneita = {"date":"data", "Parco S. Chiara PM10": "PM10 (A)", "Parco S. Chiara PM2.5": "PM2.5 (A)", 
-#                        "Parco S. Chiara Biossido di Azoto": "NO2 (A)", "Parco S. Chiara Ozono": "O3 (A)",
-#                        "Parco S. Chiara Biossido Zolfo": "SO2 (A)", "Via Bolzano PM10":"PM10 (B)", 
-#                        "Via Bolzano PM10":"PM10 (B)", "Via Bolzano Biossido di Azoto":"NO2 (B)",
-#                        "Via Bolzano Ossido di Carbonio":"CO (B)", "meanTemperature":"T media", "FASCIA_CONSUMI":"Categoria", "meanWinds":"vento"}
 
-# figmat, axs_corr_mat = plt.subplots(1,2, figsize=(14,6))
-# #plot delle matrici di correlazione
-# for ii in range(2):
-#     dfFasceOrarie[ii].rename(columns=dict_nomicolonneita, inplace=True)
-#     features = ['data',] + list( dfFasceOrarie[ii].columns.values[3:11]) + ['T media',]
-#     target = list(['Categoria',])
-#     corr_columns = features + target + ['vento',]
-#     corr = dfFasceOrarie[ii][corr_columns].corr()
-#     sns.heatmap(corr, ax=axs_corr_mat[ii], cmap=plt.cm.RdYlGn, annot=True)
-#     axs_corr_mat[ii].set_title( fasce[ii] , fontsize=13)
+def correlationMatrixPlot():
+    
+    dict_nomicolonneita = {'date_x':'data', 'consumoOrarioUbicazione_x':'consumo', 'meanTemperature_x':'T media',
+    'precipitations_x':'precipitazioni', 'meanWinds_x':'vento', 'consumoOrarioUbicazione_x+1':'consumo\ngiorno\nsuccessivo'}
 
-#plt.show()
+    fasce = ['giorno (08:00-19:00)', 'sera (19:00-24:00)', 'notte (00:00-08:00)']
+    # #plot delle matrici di correlazione
+
+    stations = ["T0129", "T0135"]
+    station_names = ["Laste", "Roncafort"]
+    figmatA, axs_corr_matA = plt.subplots(1,2, figsize=(14,6))
+    figmatB, axs_corr_matB = plt.subplots(1,2, figsize=(14,6))
+    figmat = [figmatA, figmatB]
+    axs_corr_mat = [axs_corr_matA, axs_corr_matB]
+    fig_stagione = plt.figure()
+    ax_stagione = plt.axes()
+    for jj, station in enumerate(stations):
+
+        for ii in range(2):
+            print(f"Entering for loop with ii={ii}")
+            print(f"station is {station}")
+            df = dfFasceOrarie[ii][dfFasceOrarie[ii]['station_x']==station]
+            df.rename(columns=dict_nomicolonneita, inplace=True)
+            df['data'] = pd.to_datetime(df['data']).dt.dayofyear
+            corr_cols = list(dict_nomicolonneita.values())
+            corr = df[corr_cols].corr()
+            sns.heatmap(corr, ax=axs_corr_mat[jj][ii], cmap=plt.cm.RdYlGn)
+            axs_corr_mat[jj][ii].set_title( fasce[ii] , fontsize=13)
+            if ii==0:
+                ax_stagione.scatter(df['data'], df['consumo'], label=station_names[jj])
+
+        ax_stagione.legend(fontsize=13)
+        ax_stagione.grid(visible=True)
+        ax_stagione.set_xlabel("giorno dell'anno")
+        ax_stagione.set_ylabel("consumo")
+
+        figmat[jj].suptitle(station_names[jj])
+    plt.show()
+    
+    return
