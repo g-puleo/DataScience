@@ -31,7 +31,7 @@ def genera_mappa_consumi( datiConsumi, df_linee, grid ):
             datiConsumi:pd.DataFrame che contiene colonna con i codici di linea (LINESET) e i rispettivi consumi
             registrati in un certo giorno e orario.
             
-            df_linee: pd.DataFrame che contiene: codici linea, celle per cui passa la linea,
+            df_linee: pd.DataFrame ciene: codici linea, celle per cui passa la linea,
             e nr. di utenze in quella cella.
             
             grid: gpd.GeoDataFrame che contiene le celle in cui è suddiviso il territorio come istanze della classe
@@ -45,7 +45,7 @@ def genera_mappa_consumi( datiConsumi, df_linee, grid ):
     #contiamo le ubicazioni per linea
     df_ubi_per_line = pd.DataFrame(df_linee.groupby('LINESET')['NR_UBICAZIONI'].sum()).reset_index()
     #contiamo i consumi per linea
-    print(datiConsumi.columns)
+    #print(datiConsumi.columns)
     df_con_per_line = pd.DataFrame( datiConsumi.groupby('LINESET')['consumi'].sum() ).reset_index()
     #uniamo i due dataframe
     df_consperub = pd.merge(left = df_con_per_line, right = df_ubi_per_line, how = 'outer',on='LINESET' )
