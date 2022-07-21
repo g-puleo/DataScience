@@ -61,12 +61,12 @@ Project Organization
 	`python3 src/data/make_dataset_consumi.py`
 	`python3 src/data/make_dataset_inquinamento.py`
 
-   Questo salva dei dataframe elaborati in formato .pkl nella cartella data/interim
+   Questo salva dei dataframe elaborati in formato .pkl nella cartella data/interim.
    Una volta creati, essi possono essere velocemente importati usando
    	`from trentodatalib import meteo, consumi, inquinamento`
 
 2. Poi si può creare il dataset per la classificazione eseguendo
-	`python3 stc/make_dataset_classification.py`
+	`python3 src/make_dataset_classification.py` .
    Questo crea il dataset nella cartella data/processed, sempre nel formato .pkl
    
 3. Una volta creati tutti i dataset la visualizzazione dei risultati, in un notebook o in una console iPython, si possono importare i moduli contenuti in src/visualization ed eseguire le funzioni che sono contenute in essi. In particolare:
