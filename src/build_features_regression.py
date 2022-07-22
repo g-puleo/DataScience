@@ -66,11 +66,10 @@ df_inquinamentoprov = df_inquinamentoprov.groupby([df_inquinamentoprov['datetime
 
 df_inquinamentoprov.rename(columns={'datetime':'date'}, inplace=True)
 
-
+#print(df_inquinamentoprov)
 # qui inizia una parte da aggiustare perchè devo fare il database dfmeteo_consumi che al momento non ho da nessuna parte 
 #  a me interessano i consumi sull'intero territorio non mi interessa quale sia la stazione più vicina in realtà
-
-
+df_inquinamentoprov = df_inquinamentoprov.groupby( ['date', 'TimeRange', 'isWeekend']).agg(np.nanmean).reset_index()
 
 
 df_consumi = consumi.df_consumi
@@ -140,7 +139,7 @@ df_giornoTN = fz.addNextDay(df_giornoTN, columns_to_drop)
 df_seraTN = fz.addNextDay(df_seraTN, columns_to_drop)
 # questi sono i database per effettuare la regressione sul territorio comunale di Trento 
 #print(df_giornoTN.columns.values)
-print(df_seraTN)
+#print(df_seraTN)
 
 
 #salvo in file esterni usando pickle
@@ -150,10 +149,31 @@ df_giornoTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/
 df_seraTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrComuneEv.pkl"))
 
 
+'''# la cosa interessante è che devo già dividere ora in train e test
 
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from joblib import dump, load
 
-
-
-
-
+def splitdatabase(df_in, feat, targ):
+	Xtrain, Xtest, Ytrain, Ytest = train_test_split(df_in[feat], df_in[targ], test_size = 0.30, random_state = 7)
+	df_train = Xtrain.join(Ytrain, lsuffix='_caller', rsuffix='_other')
+	return df_test
+	
+print(splitdatabase())'''
+	
+	
+	
+print(df_inquinamentoprov)
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
