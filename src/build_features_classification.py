@@ -7,42 +7,6 @@ import pandas as pd
 import numpy as np
 
 
-# riprendendo il database elaborato nel file meteo consumi e lo sistemo al fine di ottenere dati meteo mediati o sommati sulle fasce orarie 
-#######Domanda queste linee di codice forse è meglio metetrle direttamente in meteo ????
-#creo due pd.Series che contengono dati raggruppati e mediati/sommati come voglio
-'''meanTempGb  = meteo_df.groupby(['station', meteo_df['datetime'].dt.date,'TimeRange']  )['temperatures'].mean() 
-sumPrecipGb = meteo_df.groupby(['station', meteo_df['datetime'].dt.date,'TimeRange']  )['precipitations'].sum() 
-meanWindsGb = meteo_df.groupby(['station', meteo_df['datetime'].dt.date,'TimeRange']  )['windSpeed'].mean()
-
-# unisco in un dataframe e lo aggiusto
-dicttmp = { 'meanTemperature': meanTempGb, 'precipitations': sumPrecipGb, 'meanWinds': meanWindsGb}
-df_tmp_gb = pd.DataFrame(dicttmp).reset_index()
-df_tmp_gb.rename(columns={'datetime':'date'} , inplace=True) 
-
-#voglio unirlo con i dati di geometry, e altri dati giornalieri non usati nel groupby
-df_tmp_tomerge = meteo_df[['station', 'geometry','elevation', 'minTemperature', 'maxTemperature', 'datetime', 'isWeekend', 'TimeRange']]
-#il seguente comando genera una warning ma a quanto pare è un falso positivo. 
-#serve a tenere solo le date e a buttare le ore
-df_tmp_tomerge['date'] =df_tmp_tomerge['datetime'].dt.date
-#togliendo datetime ho un df con un sacco di righe uguali, le butto con .drop_duplicates()
-df_tmp_tomerge.drop(columns='datetime', inplace=True)
-df_tmp_tomerge  = df_tmp_tomerge.loc[df_tmp_tomerge.astype(str).drop_duplicates().index].reset_index()
-df_tmp_tomerge.drop(columns='index', inplace=True)
-#finalmente unisco i due dataframe
-meteo_df = pd.merge(left=df_tmp_tomerge, right=df_tmp_gb, on=['station', 'date', 'TimeRange'])
-'''
-
-# Ora provo ad associare le celle di territorio 
-'''
-gdfLineCells = pd.merge(left=rawdata.gridraw, right=consumi.df_linee, left_on='id', right_on='SQUAREID', how='right').drop(columns='id')
-gdfLineCells[['geometry', 'SQUAREID']].drop_duplicates().reset_index().drop(columns='index')
-#per calcolare il criordiniamoentroide è tecnicamente opportuno trasformare coordinate sferiche in km
-#anche se non dovrebbe fare molta differenza
-gdfLineCells.to_crs(epsg=3035, inplace=True)
-gdfLineCells['centroid'] = gdfLineCells['geometry'].centroid
-mapsta.df_mappa_stazioni.to_crs(epsg=3035, inplace=True)
-
-'''
 #per evitare conflitti uso .copy()
 gdfLineCells = meteo.gdfLineCells.copy()
 meteo_df = meteo.meteo_df.copy()
@@ -85,7 +49,6 @@ dfTrentoZone = df_meteo_consumi[  ((df_meteo_consumi['station']=='T0129') | (df_
 
 # finalmente unisco con dati di meteo e consumi di Trento
 
-
 dfTrentoZoneDay = dfTrentoZone[ dfTrentoZone['TimeRange'] == 'day' ]
 dfTrentoZoneEv = dfTrentoZone[ dfTrentoZone['TimeRange'] == 'evening' ]
 dfTrentoZoneNight = dfTrentoZone[ dfTrentoZone['TimeRange'] == 'night' ]
@@ -120,7 +83,9 @@ dfTrentoZoneNight = pd.concat([dfTrentoZoneNightA, dfTrentoZoneNightB]).reset_in
 dfTrentoZoneDay.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiTrentoDay.pkl"))
 dfTrentoZoneEv.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiTrentoEv.pkl"))
 dfTrentoZoneNight.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiTrentoNight.pkl"))
-df_meteo_consumi.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datimeteoconsumi.pkl"))
+
+#salvo anche il df_meteo_consumi perché sarà unito ai dati dell'inquinamento per fare la regressione.
+df_meteo_consumi.to_pickle(os.path.join(os.path.dirname(__file__),"../data/interim/datimeteoconsumi.pkl"))
 
 print(dfTrentoZoneDay.head())
 

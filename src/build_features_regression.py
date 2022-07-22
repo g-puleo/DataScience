@@ -75,7 +75,7 @@ df_inquinamentoprov.rename(columns={'datetime':'date'}, inplace=True)
 
 df_consumi = consumi.df_consumi
 meteo_df = meteo.meteo_df
-df_meteo_consumi = pd.read_pickle(  os.path.join(os.path.dirname(__file__),"../data/processed/datimeteoconsumi.pkl") )
+df_meteo_consumi = pd.read_pickle(  os.path.join(os.path.dirname(__file__),"../data/interim/datimeteoconsumi.pkl") )
 
 df_meteo_consumi_tot = df_meteo_consumi.copy()
 # voglio solo i dati infrasettimanali 
@@ -144,10 +144,11 @@ print(df_seraTN)
 
 
 #salvo in file esterni usando pickle
-df_giornoprov.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiregrprovday.pkl"))
-df_seraprov.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiregrprovev.pkl"))
-df_giornoTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiregrcomuneday.pkl"))
-df_seraTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiregrcomuneev.pkl"))
+df_giornoprov.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrProvDay.pkl"))
+df_seraprov.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrProvEv.pkl"))
+df_giornoTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrComuneDay.pkl"))
+df_seraTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrComuneEv.pkl"))
+
 
 
 
