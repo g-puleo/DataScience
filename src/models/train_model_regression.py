@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 #divido il database in train e test
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression, Lasso, Ridge
+from sklearn.linear_model import LinearRegression, Lasso, Ridge, LassoCV, RidgeCV
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from joblib import dump, load
@@ -23,63 +23,93 @@ df_seraTN = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/pr
 df_giornoprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiregrprovday.pkl"))
 df_seraprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiregrprovev.pkl"))
 
-
+#funzione che effettua la regressione lineare 
 def regressioneLineare( df_in, feat, targ): 
 	Xtrain, Xtest, Ytrain, Ytest = train_test_split(df_in[feat], df_in[targ], test_size = 0.30, random_state = 7)
 	ppl = Pipeline(  [ ('scaler', StandardScaler() ) , ('clf', LinearRegression() ) ] ) 
 	ppl.fit(Xtrain, Ytrain)
 	trainScore= ppl.score(Xtrain, Ytrain)
 	testScore = ppl.score(Xtest, Ytest)
-	print(f"score on train is = {trainScore}")
-	print(f"score on test is = {testScore}")
+	print(f"score Linear Regression on train is = {trainScore}")
+	print(f"score Linear Regression on test is = {testScore}")
 	return ppl
-# class sklearn.linear_model.Lasso(alpha=1.0, *, fit_intercept=True, normalize='deprecated', precompute=False, copy_X=True, max_iter=1000, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'
-def regressionelasso( df_in, feat, targ, alpha): 
+# funzione che effettua la regressione con regolarizzatore lasso
+def regressionelassoCV( df_in, feat, targ): 
 	Xtrain, Xtest, Ytrain, Ytest = train_test_split(df_in[feat], df_in[targ], test_size = 0.30, random_state = 7)
-	ppl = Pipeline(  [ ('scaler', StandardScaler() ) , ('clf', Lasso(alpha) ) ] ) 
-	ppl.fit(Xtrain, Ytrain)
-	trainScore= ppl.score(Xtrain, Ytrain)
-	testScore = ppl.score(Xtest, Ytest)
-	print(f"score on train is = {trainScore}")
-	print(f"score on test is = {testScore}")
-	return ppl
-
-def regressioneridge(df_in, feat, targ, alpha):
+	scaler = StandardScaler()
+	scaler.fit(Xtrain[feat])
+	lcv = LassoCV(eps=0.001, n_alphas=100, alphas=None)
+	lcv.fit(Xtrain, Ytrain)
+	trainScore= lcv.score(Xtrain, Ytrain)
+	testScore = lcv.score(Xtest, Ytest)
+	print ( f"la penalty lasso alpha scelta = {lcv.alpha_}")
+	print(f"score LassoCV on train is = {trainScore}")
+	print(f"score LassoCV on test is = {testScore}")
+	return lcv
+# funzione che effettua la regressione con regolarizzatore ridge 
+def regressioneridgeCV( df_in, feat, targ): 
 	Xtrain, Xtest, Ytrain, Ytest = train_test_split(df_in[feat], df_in[targ], test_size = 0.30, random_state = 7)
-	ppl = Pipeline(  [ ('scaler', StandardScaler() ) , ('clf', Ridge(alpha) ) ] ) 
-	ppl.fit(Xtrain, Ytrain)
-	trainScore= ppl.score(Xtrain, Ytrain)
-	testScore = ppl.score(Xtest, Ytest)
-	print(f"score on train is = {trainScore}")
-	print(f"score on test is = {testScore}")
-	return ppl
-
+	scaler = StandardScaler()
+	scaler.fit(Xtrain[feat])
+	lcv = RidgeCV(alphas=[1e-5, 1e-4, 1e-3, 1e-2])
+	lcv.fit(Xtrain, Ytrain)
+	trainScore= lcv.score(Xtrain, Ytrain)
+	testScore = lcv.score(Xtest, Ytest)
+	print ( f"la penalty ridge alpha scelta = {lcv.alpha_}")
+	print(f"score RidgeCV on train is = {trainScore}")
+	print(f"score RidgeCV on test is = {testScore}")
+	return lcv
+# funzione che salva i modelli
 def savemodel( model, namemodel):
 	filename = '../../models/modelreg_'+namemodel+'.sav'
 	dump(model, filename)
 
 
-#ora definisco le features e il target 
+#ora definisco le features e il target nel caso del comune di Trento
 features= ['consumoOrarioUbicazione_x', 'meanTemperature_x', 'Parco S. Chiara Biossido Zolfo_x']
 target =  'consumoOrarioUbicazione_x+1'
 
 model1 = regressioneLineare(df_giornoTN, features, target)
-
 savemodel(model1, 'giornoTN')
+
+modellasso1 = regressionelassoCV(df_giornoTN, features, target)
+savemodel(modellasso1, 'lassogiornoTN')
+
+modelRidge1 = regressioneridgeCV(df_giornoTN, features, target)
+savemodel(modelRidge1, 'ridgegiornoTN')
+
 model2 = regressioneLineare(df_seraTN, features, target)
 savemodel(model2, 'seraTN')
-# ora definisco le features e il target 
+
+modellasso2 = regressionelassoCV(df_seraTN, features, target)
+savemodel(modellasso2, 'lassoseraTN')
+
+modelRidge2 = regressioneridgeCV(df_seraTN, features, target)
+savemodel(modelRidge2, 'ridgeseraTN')
+
+# ora definisco le features e il target nel caso della provincia di Trento
 features= ['consumoOrarioUbicazionemean_x', 'meanTemperaturemean_x', 'Parco S. Chiara Biossido Zolfo_x']
 target =  'consumoOrarioUbicazionemean_x+1'
-#target = df_giornoTN.columns.values[-1]]
+
 model3 = regressioneLineare(df_giornoprov, features, target)
 savemodel(model3, 'giornoprov')
+
+modellasso3 = regressionelassoCV(df_giornoprov, features, target)
+savemodel(modellasso3, 'lassogiornoprov')
+
+modelridge3 = regressioneridgeCV(df_giornoprov, features, target)
+savemodel(modelridge3, 'ridgegiornoprov')
+
 model4 = regressioneLineare(df_seraprov, features, target)
 savemodel(model4, 'seraprov')
-# per uno dei modelli si può vedere come cambia lo score di test e train al variare delle features 
-# scelgo i database del modello 1 
-print(df_giornoprov)
 
+modellasso4 = regressionelassoCV(df_seraprov, features, target)
+savemodel(modellasso4, 'lassoseraprov')
+
+modelridge4 = regressioneridgeCV(df_seraprov, features, target)
+savemodel(modelridge4, 'ridgeseraprov')
+
+# qui c'è la bozza di un grafico estremamente interessante che mostra gli score al variare del numero di features
 '''
 # queste sono tutte le colonne che hai a disposizione
 ['Parco S. Chiara PM10_x', 'Parco S. Chiara PM2.5_x',
@@ -106,7 +136,9 @@ print(df_giornoprov)
 Parco S. Chiara PM10_x', 'Parco S. Chiara PM2.5_x','Parco S. Chiara Biossido di Azoto_x' ,'Parco S. Chiara Ozono_x','Parco S. Chiara Biossido Zolfo_x',
 
 '''
-featuresList = [ 'consumoOrarioUbicazionemean_x','meanTemperaturemean_x', 'precipitationsmean_x', 'meanTemperaturemean_x+1', 'precipitationsmean_x+1','Parco S. Chiara PM2.5_x']
+# per uno dei modelli si può vedere come cambia lo score di test e train al variare delle features 
+# attenzione c'è un inquinante ( 'Parco S. Chiara PM10_x') che un giorno ha un Nan non inserire quello nella featuresList
+featuresList = [ 'consumoOrarioUbicazionemean_x','meanTemperaturemean_x', 'precipitationsmean_x', 'meanTemperaturemean_x+1', 'precipitationsmean_x+1','Parco S. Chiara PM2.5_x','Parco S. Chiara Biossido Zolfo_x']
 
 N = len(featuresList) 
 ygTest = np.zeros( (N,)  ) 
@@ -133,6 +165,15 @@ for ii  in range(2):
     axs[ii].set_title( titles[ii] ) 
 
 
-plt.show()
+
+
+
+
+
+
+
+
+
+#plt.show()
 
 
