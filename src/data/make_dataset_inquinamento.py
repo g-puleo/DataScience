@@ -65,5 +65,5 @@ dfInqTrento = dfInqTrento.groupby( ['date', 'TimeRange', 'isWeekend']).agg(np.na
 dfInqTrento.to_pickle(os.path.join(os.path.dirname(__file__),"../../data/interim/datiInquinamento.pkl")  )
 
 
-df_inquinamento.to_pickle( os.path.join(os.path.dirname(__file__),"../../data/interim/datitotinquinamento.pkl") )
+df_inquinamento.to_pickle( os.path.join(os.path.dirname(__file__),"../../data/interim/datiTotInquinamento.pkl") )
 
