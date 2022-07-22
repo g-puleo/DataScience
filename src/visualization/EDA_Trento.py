@@ -62,8 +62,12 @@ def histplotconsumi():
 
 # #rinomino le colonne per rendere più leggibile il plot della matrice
 
-def correlationMatrixPlot():
-    
+def edaConsumiZoneTrento(mode="corr"):
+    '''Questa funzione prende un argomento che può essere
+        "corr": (default) plotta matrici delle correlazioni per i dataframe delle due zone di trento.
+        "season": plotta l'andamento stagionale dei consumi orari per ubicazione nelle due diverse zone. 
+        Se l'argomento è diverso non plotta nulla. 
+        '''
     dict_nomicolonneita = {'date_x':'data', 'consumoOrarioUbicazione_x':'consumo', 'meanTemperature_x':'T media',
     'precipitations_x':'precipitazioni', 'meanWinds_x':'vento', 'consumoOrarioUbicazione_x+1':'consumo\ngiorno\nsuccessivo'}
 
@@ -72,33 +76,43 @@ def correlationMatrixPlot():
 
     stations = ["T0129", "T0135"]
     station_names = ["Laste", "Roncafort"]
-    figmatA, axs_corr_matA = plt.subplots(1,2, figsize=(14,6))
-    figmatB, axs_corr_matB = plt.subplots(1,2, figsize=(14,6))
-    figmat = [figmatA, figmatB]
-    axs_corr_mat = [axs_corr_matA, axs_corr_matB]
-    fig_stagione = plt.figure()
-    ax_stagione = plt.axes()
+
+    if mode == "corr":
+        figmatA, axs_corr_matA = plt.subplots(1,2, figsize=(14,6))
+        figmatB, axs_corr_matB = plt.subplots(1,2, figsize=(14,6))
+        figmat = [figmatA, figmatB]
+        axs_corr_mat = [axs_corr_matA, axs_corr_matB]
+
+
+
+    if mode == "season":
+        fig_stagione = plt.figure()
+        ax_stagione = plt.axes()
+    
     for jj, station in enumerate(stations):
 
         for ii in range(2):
-            print(f"Entering for loop with ii={ii}")
-            print(f"station is {station}")
+            
             df = dfFasceOrarie[ii][dfFasceOrarie[ii]['station_x']==station]
             df.rename(columns=dict_nomicolonneita, inplace=True)
             df['data'] = pd.to_datetime(df['data']).dt.dayofyear
-            corr_cols = list(dict_nomicolonneita.values())
-            corr = df[corr_cols].corr()
-            sns.heatmap(corr, ax=axs_corr_mat[jj][ii], cmap=plt.cm.RdYlGn)
-            axs_corr_mat[jj][ii].set_title( fasce[ii] , fontsize=13)
-            if ii==0:
+            if mode == "corr":
+                corr_cols = list(dict_nomicolonneita.values())
+                corr = df[corr_cols].corr()
+                sns.heatmap(corr, ax=axs_corr_mat[jj][ii], cmap=plt.cm.RdYlGn)
+                axs_corr_mat[jj][ii].set_title( fasce[ii] , fontsize=13)
+            if ii==0 and mode == "season":
                 ax_stagione.scatter(df['data'], df['consumo'], label=station_names[jj])
 
-        ax_stagione.legend(fontsize=13)
-        ax_stagione.grid(visible=True)
-        ax_stagione.set_xlabel("giorno dell'anno")
-        ax_stagione.set_ylabel("consumo")
 
-        figmat[jj].suptitle(station_names[jj])
+        if mode == "season":
+            ax_stagione.legend(fontsize=13)
+            ax_stagione.grid(visible=True)
+            ax_stagione.set_xlabel("giorno dell'anno")
+            ax_stagione.set_ylabel("consumo")
+        if mode == "corr":
+            figmat[jj].suptitle(station_names[jj])
+        
     plt.show()
     
     return
