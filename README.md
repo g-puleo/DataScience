@@ -72,5 +72,14 @@ Project Organization
 3. Una volta creati tutti i dataset la visualizzazione dei risultati, in un notebook o in una console iPython, si possono importare i moduli contenuti in src/visualization ed eseguire le funzioni che sono contenute in essi. In particolare:
 	+ EDA_Trento.py contiene due funzioni che plottano analisi dei consumi nelle due zone in cui è suddiviso trento
 	+ mappe.py contiene varie funzioni che plottano le mappe
-	
+
+## Cosa manca da fare
++ Correlazioni inquinamento gigante
++ Inserire regressione e classificazione
++ Visualizzazione esiti classificazione
++ Convertire ampere in kWh
++ Aggiungere plot della mappa delle zone in cui è divisa trento 
++ Aggiustare Makefile
++ Consumi negativi, come motivare?
+
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
