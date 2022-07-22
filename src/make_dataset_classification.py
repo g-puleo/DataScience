@@ -120,7 +120,7 @@ dfTrentoZoneNight = pd.concat([dfTrentoZoneNightA, dfTrentoZoneNightB]).reset_in
 dfTrentoZoneDay.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiTrentoDay.pkl"))
 dfTrentoZoneEv.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiTrentoEv.pkl"))
 dfTrentoZoneNight.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiTrentoNight.pkl"))
-
+df_meteo_consumi.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datimeteoconsumi.pkl"))
 
 print(dfTrentoZoneDay.head())
 
