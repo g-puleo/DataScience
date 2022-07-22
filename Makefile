@@ -24,9 +24,11 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
 ## Make Dataset
-data: requirements
-	$(PYTHON_INTERPRETER) DS_2022/data/make_dataset.py data/raw data/processed
-
+data:
+	$(PYTHON_INTERPRETER) src/data/make_dataset_consumi.py
+	$(PYTHON_INTERPRETER) src/data/make_dataset_meteo.py
+	$(PYTHON_INTERPRETER) src/data/make_dataset_inquinamento.py
+	
 ## Delete all compiled Python files
 clean:
 	find . -type f -name "*.py[co]" -delete
@@ -57,6 +59,7 @@ test_environment:
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
+
 
 
 
