@@ -81,5 +81,9 @@ Project Organization
 + Aggiungere plot della mappa delle zone in cui è divisa trento 
 + Aggiustare Makefile
 + Consumi negativi, come motivare?
++ Pulire codici da import inutili
++ Scrivere bene tutto readme
++ scrivere report in jupyter 
+
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
