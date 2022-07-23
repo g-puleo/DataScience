@@ -147,23 +147,6 @@ df_giornoprov.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processe
 df_seraprov.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrProvEv.pkl"))
 df_giornoTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrComuneDay.pkl"))
 df_seraTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrComuneEv.pkl"))
-
-
-'''# la cosa interessante è che devo già dividere ora in train e test
-
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from joblib import dump, load
-
-def splitdatabase(df_in, feat, targ):
-	Xtrain, Xtest, Ytrain, Ytest = train_test_split(df_in[feat], df_in[targ], test_size = 0.30, random_state = 7)
-	df_train = Xtrain.join(Ytrain, lsuffix='_caller', rsuffix='_other')
-	return df_test
-	
-print(splitdatabase())'''
-	
 	
 	
 print(df_inquinamentoprov)
