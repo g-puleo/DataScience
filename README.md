@@ -74,8 +74,8 @@ Project Organization
 	+ mappe.py contiene varie funzioni che plottano le mappe
 
 ## Cosa manca da fare
-+ Correlazioni inquinamento gigante
-+ Inserire regressione e classificazione
++ Correlazioni inquinamento gigante: fatto
++ Inserire regressione e classificazione: fatto
 + Visualizzazione esiti classificazione
 + Convertire ampere in kWh
 + Aggiungere plot della mappa delle zone in cui è divisa trento 
