@@ -1,5 +1,3 @@
-.PHONY: clean data requirements 
-
 #################################################################################
 # GLOBALS                                                                       #
 #################################################################################
@@ -18,39 +16,44 @@ endif
 # COMMANDS                                                                      #
 #################################################################################
 
-## Install Python Dependencies
+.PHONY: clean data requirements features train
+
+## Installa requisiti nel python di sistema
 requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
-## Make Dataset
+## Elaborazione dei dati
 data:
 	$(PYTHON_INTERPRETER) src/data/make_dataset_consumi.py
 	$(PYTHON_INTERPRETER) src/data/make_dataset_meteo.py
 	$(PYTHON_INTERPRETER) src/data/make_dataset_inquinamento.py
 
+## Unione e preparazione di database per training
 features:
 	$(PYTHON_INTERPRETER) src/build_features_classification.py
 	$(PYTHON_INTERPRETER) src/build_features_regression.py
 
+## Training di classificatori e regressori
 train: 
 	$(PYTHON_INTERPRETER) src/model/train_model_classification.py
 	$(PYTHON_INTERPRETER) src/model/train_model_regression.py
-## Delete all compiled Python files
+
+## Cancella tutti i file python compilati
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
-## Set up python interpreter environment
+## Creazione di ambiente python con requisiti
 create_environment:
 ifeq (True,$(HAS_CONDA))
 		@echo ">>> Detected conda, creating conda environment."
 ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
-	conda create --name $(PROJECT_NAME) python=3
+	conda env create -f DS_2022.yml --name $(PROJECT_NAME) python=3
 else
 	conda create --name $(PROJECT_NAME) python=2.7
 endif
-		@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
+		@echo ">>> New conda env created. Activate with:\nconda activate $(PROJECT_NAME)"
 else
 	$(PYTHON_INTERPRETER) -m pip install -q virtualenv virtualenvwrapper
 	@echo ">>> Installing virtualenvwrapper if not already installed.\nMake sure the following lines are in shell startup file\n\
@@ -62,12 +65,6 @@ endif
 ## Test python environment is setup correctly
 test_environment:
 	$(PYTHON_INTERPRETER) test_environment.py
-
-#################################################################################
-# PROJECT RULES                                                                 #
-#################################################################################
-
-
 
 
 #################################################################################
