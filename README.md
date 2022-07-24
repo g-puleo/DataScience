@@ -38,7 +38,7 @@ Project Organization
        │
        ├── data           <- Scripts to download or generate data
        │   └── make_dataset_meteo.py
-       | 
+       | didididididi
        │
        ├── features       <- Scripts to turn raw data into features for modeling
        │   └── build_features.py
@@ -76,8 +76,8 @@ Project Organization
 ## Cosa manca da fare
 + Correlazioni inquinamento gigante: fatto
 + Inserire regressione e classificazione: fatto
-+ Visualizzazione esiti classificazione
-+ Convertire ampere in kWh
++ Visualizzazione esiti classificazione: fatto
++ Convertire ampere in kWh: fatto
 + Aggiungere plot della mappa delle zone in cui è divisa trento 
 + Aggiustare Makefile
 + Consumi negativi, come motivare?
