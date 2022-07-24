@@ -94,7 +94,7 @@ def plot_mappa_diff_wknd():
 
 
 def plot_mappa_stazioni():
-
+	
 	fig, axmappastazioni = plt.subplots(1, 2, figsize=(14,7))
 	for ii in range(2):
 		meteo.df_mappa_stazioni.plot(color='blue', ax=axmappastazioni[ii]) 
