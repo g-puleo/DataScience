@@ -149,7 +149,7 @@ df_giornoTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/
 df_seraTN.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiRegrComuneEv.pkl"))
 	
 	
-print(df_inquinamentoprov)
+print("Creazione dei dataset per la regressione riuscita!")
 	
 	
 	

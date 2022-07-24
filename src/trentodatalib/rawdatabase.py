@@ -14,12 +14,7 @@ import matplotlib as mpl
 from shapely.geometry import Polygon, Point
 from fiona.crs import from_epsg
 import fiona
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import confusion_matrix
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression
+
 
 # metto gli import che servono per questo file: 
 from trentodatalib import funzioni as fz
@@ -84,10 +79,10 @@ gridraw.drop(columns=['type', 'properties'], inplace=True)
 
 
 # Estraggo i dati dei comuni, questi serviranno solo per un eventuale plot 
-'''
-dati_comuni = gpd.read_file(current_path/ tpath.ext_data_path / files['comuni'] )
-dati_province = gpd.read_file(current_path/ tpath.ext_data_path / files['province'] )
 
-gdf_comuniTNraw = dati_comuni[ dati_comuni['COD_PROV'] == 22 ].reset_index(drop=True)
-gdf_comuniTNraw.crs
-'''
+dati_comuni = gpd.read_file(current_path/ tpath.ext_data_path / tpath.filenames['comuni'] )
+#dati_province = gpd.read_file(current_path/ tpath.ext_data_path / files['province'] )
+
+gdf_comuniTN = dati_comuni[ dati_comuni['COD_PROV'] == 22 ].reset_index(drop=True)
+#gdf_comuniTNraw.crs
+

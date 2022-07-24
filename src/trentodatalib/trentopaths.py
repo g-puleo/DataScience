@@ -10,6 +10,7 @@ filenames = {'grid':'trentino-grid.geojson',
          'DEC-DATA':'SET-dec-2013.csv',
          'SET-lines':'line.csv',
          'inquinamento' :  'APPA_inquinamento_aria_Nov_Dec_2013.csv',
-         'meteo': 'meteotrentino-weather-station-data.json'
+         'meteo': 'meteotrentino-weather-station-data.json',
+         'comuni':'Com01012013_WGS84.shp'
         }
 
