@@ -176,8 +176,8 @@ dependencies:
   - pydantic=1.9.1
   - pygments=2.11.2
   - pyopenssl=22.0.0
-  - pyparsing=3.0.4
-  - pyproj=2.6.1.post1
+  - pyparsing=3.
+  proj=2.6.1.post1
   - pyrsistent=0.18.1
   - pysocks=1.7.1
   - python=3.8.13
@@ -234,5 +234,5 @@ dependencies:
   - pip:
     - pip==22.2
     - setuptools==63.2.0
-    - contextily=1.2.0
+    - contextily==1.2.0
 prefix: /home/gianmarco/anaconda3/envs/DS_2022
