@@ -1,0 +1,12 @@
+name: DS_2022
+channels:
+  - defaults
+dependencies:
+  - geopandas
+  - ipykernel
+  - notebook
+  - jupyterlab
+  - contextily
+  - pandas-profiling
+  - ipywidgets
+prefix: /home/gianmarco/anaconda3/envs/DS_2022
