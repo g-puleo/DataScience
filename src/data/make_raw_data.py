@@ -3,7 +3,7 @@
 import requests
 import os
 
-def downloadData(fname, url, folder='data'):
+def downloadData(fname, url, folder='data/raw'):
 	response = requests.get(url)
 	name = "../../"+ folder + "/" + fname 
 	filename = os.path.join( os.path.dirname(__file__), name)
