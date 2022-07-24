@@ -14,19 +14,9 @@ from trentodatalib import funzioni as fz
 from trentodatalib import rawdatabase as rawdata
 
 
-
-
 grid = rawdata.gridraw
-# ## qua faccio la prima mappa che plotta solamente il trentino su una carta geografica usanto la libreria contextily
-# axgrid = grid.plot(color='blue', alpha=0.3) #vediamo che la mappa si plotta decentemente
-# #sovrappongo mappa del trentino
-# cx.add_basemap(axgrid, crs=grid.crs.to_string() ) 
 
-# #per salvare la figura
-# #plt.savefig("mappaTrentinoBlu.pdf", bbox_inches='tight' , dpi=300) 
-
-
-# Adesso plotto una mappa attraverso la funzione genera_mappa_consumi che sta nella libreria funzioni
+# plotto una mappa attraverso la funzione genera_mappa_consumi che sta nella libreria funzioni
 #La mappa rappresenta i consumi lordi di tutto il mese ed evidenzia le zone a più alto consumo nella zona di trento
 def plot_mappa_consumi_lordi():
 	gdf_consumi_lordi = fz.genera_mappa_consumi(rawdata.df_consumiraw, rawdata.df_lineeraw, grid) 

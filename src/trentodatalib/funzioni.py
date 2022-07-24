@@ -1,29 +1,8 @@
-#questo file sarà come una libreria di funzioni editate e scritte da noi 
+#questo file è una libreria di funzioni utili 
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-#questo file sarà come una libreria di funzioni editate e scritte da noi 
+from datetime import time, date, datetime 
 
-import pandas as pd
-import geopandas as gpd
-from datetime import time, timedelta, date, datetime 
-import contextily as cx
-import numpy as np
-import json
-import numpy as np
-from pathlib  import Path
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from shapely.geometry import Polygon, Point
-from fiona.crs import from_epsg
-import fiona
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import confusion_matrix
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression
+
 def genera_mappa_consumi( datiConsumi, df_linee, grid ):
     ''' Restituisce GeoDataFrame per il plot di una mappa in scala di colore a partire dai dati relativi ai consumi.
         Inputs:
@@ -157,6 +136,5 @@ def regressioneLineare( df_in, feat, targ, talk=False ) :
 def exportTrainTestSplit(  Xtrain, Xtest, path ):
     '''After splitting data into train and test, save the indices corresponding to train and test separately
     into two csv files. path is the path of the output file including the (first part of its) name'''
-    print(f"Saving the following series to Xtrain csv file {Xtrain.index.to_series()} ")
     Xtrain.index.to_series().to_csv(path + "_train.csv")
     Xtest.index.to_series().to_csv(path + "_test.csv")

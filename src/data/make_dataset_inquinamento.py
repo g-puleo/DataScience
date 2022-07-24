@@ -6,11 +6,7 @@ from trentodatalib import rawdatabase as rawdata
 from trentodatalib import funzioni as fz
 import pandas as pd
 import numpy as np
-'''current_path = Path(__file__).parent.resolve()
 
-# dati inquinamento
-df_inquinamento= pd.read_csv(current_path/ tpath.ext_data_path / tpath.filenames['inquinamento'] , encoding='latin-1')
-'''
 df_inquinamento = rawdata.df_inquinamentoraw.copy()
 dfInqTrento = df_inquinamento[ (df_inquinamento['Stazione'] =='Parco S. Chiara' ) | (df_inquinamento['Stazione'] ==  'Via Bolzano' )]
 #convertiamo in datetime.

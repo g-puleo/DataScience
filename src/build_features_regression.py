@@ -2,33 +2,13 @@
 from trentodatalib import consumi, meteo, inquinamento 
 from trentodatalib import rawdatabase as rawdata
 from trentodatalib import funzioni as fz 
-from trentodatalib import Mappastazionimeteo 
-
 
 import os, sys
 sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
-
-
-
 import pandas as pd
-import geopandas as gpd
-from datetime import time, timedelta, datetime, date
-import contextily as cx
 import numpy as np
-import json
-from pathlib  import Path
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from shapely.geometry import Polygon, Point
-from fiona.crs import from_epsg
-import fiona
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import confusion_matrix
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression
+
 
 #funzione per sistemare le colonne degli inquinanti 
 def aggiusta_float(x):

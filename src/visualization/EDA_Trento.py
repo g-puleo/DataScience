@@ -15,16 +15,15 @@ dfFasceOrarie = [dfTrentoZoneDay, dfTrentoZoneEv, dfTrentoZoneNight]
 
 ########## visuaizzazione della divisione in categorie di consumi in alto medio basso usando i quartili ###########
 def histplotconsumi():
-    fig, axs_hist = plt.subplots(2,1, figsize=(9,7))
+    fig, axs_hist = plt.subplots(2,1, figsize=(9,14))
     fasce = ['giorno (08:00-19:00)', 'sera (19:00-24:00)', 'notte (00:00-08:00)']
     colors=['skyblue', 'mediumblue', '#000013']
     quartiles_A = [] 
     quartiles_B = []
     ylims = [0,21]
-    xlims = [0.2,0.8]
+    xlims = [0.7,2.7]
     fs = 11
     station_names = ["Zona Laste", "Zona Roncafort"]
-    
 
 
     for ii in range(3):
@@ -56,7 +55,7 @@ def histplotconsumi():
         axs_hist[kk].set_ylim(ylims)
         axs_hist[kk].set_xlim(xlims)
         axs_hist[kk].set_title(station_names[kk], fontsize=fs+2)
-        
+
     plt.show()
     return
 # ### voglio visualizzare la matrice di correlazione anche per scegliere più coscientemente le feaures da dare al classificatore
@@ -79,13 +78,13 @@ def edaConsumiZoneTrento(mode="corr"):
     station_names = ["Laste", "Roncafort"]
 
     if mode == "corr":
-        figmatA, axs_corr_matA = plt.subplots(1,2, figsize=(11,2.7))
-        figmatB, axs_corr_matB = plt.subplots(1,2, figsize=(11,2.7))
+        figmatA, axs_corr_matA = plt.subplots(1,2, figsize=(14,6))
+        figmatB, axs_corr_matB = plt.subplots(1,2, figsize=(14,6))
         figmat = [figmatA, figmatB]
         axs_corr_mat = [axs_corr_matA, axs_corr_matB]
 
     if mode == "season":
-        fig_stagione = plt.figure(figsize=(10,6))
+        fig_stagione = plt.figure()
         ax_stagione = plt.axes()
     
     for jj, station in enumerate(stations):
@@ -98,7 +97,7 @@ def edaConsumiZoneTrento(mode="corr"):
             if mode == "corr":
                 corr_cols = list(dict_nomicolonneita.values())
                 corr = df[corr_cols].corr()
-                sns.heatmap(corr, ax=axs_corr_mat[jj][ii], cmap=plt.cm.RdYlGn, annot = True)
+                sns.heatmap(corr, ax=axs_corr_mat[jj][ii], cmap=plt.cm.RdYlGn)
                 axs_corr_mat[jj][ii].set_title( fasce[ii] , fontsize=13)
             if ii==0 and mode == "season":
                 ax_stagione.scatter(df['data'], df['consumo'], label=station_names[jj])

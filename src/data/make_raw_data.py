@@ -8,7 +8,7 @@ def downloadData(fname, url, folder='data'):
 	name = "../../"+ folder + "/" + fname 
 	filename = os.path.join( os.path.dirname(__file__), name)
 	with open(filename, "wb") as f:
-		f.write(response)
+		f.write(response.content)
 		print(f"file {fname} salvato con successo in\n {filename}\n")
 
 

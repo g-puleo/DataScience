@@ -16,14 +16,19 @@ endif
 # COMMANDS                                                                      #
 #################################################################################
 
-.PHONY: clean data requirements features train
+.PHONY: clean data requirements features train raw_data
 
 ## Installa requisiti nel python di sistema
 requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
-## Elaborazione dei dati
+## Download dei dati raw
+
+raw_data: 
+	$(PYTHON_INTERPRETER) src/data/make_raw_data.py
+	
+## Prima elaborazione dei dati
 data:
 	$(PYTHON_INTERPRETER) src/data/make_dataset_consumi.py
 	$(PYTHON_INTERPRETER) src/data/make_dataset_meteo.py
@@ -62,7 +67,7 @@ else
 	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
 endif
 
-## Test python environment is setup correctly
+## Verifica la corretta versione di python
 test_environment:
 	$(PYTHON_INTERPRETER) test_environment.py
 
