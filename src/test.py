@@ -1,3 +1,3 @@
-from trentodatalib import meteo, inquinamento
+from trentodatalib import meteo, inquinamento, rawdatabase
 
-print(inquinamento.dfInqTrento.head())
+#print(inquinamento.dfInqTrento.head())
