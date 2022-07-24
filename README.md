@@ -38,8 +38,8 @@ Project Organization
        ├── __init__.py    <- Makes src a Python module
        │
        ├── data           <- Scripts to download or generate data
-       │   └── make_dataset_meteo.py
-       | didididididi
+       │   └
+       | 
        │
        ├── features       <- Scripts to turn raw data into features for modeling
        │   └── build_features.py
@@ -59,18 +59,18 @@ Project Organization
 
 Clonare la repository ed eseguire i seguenti comandi su terminale bash. È necessario aver installato conda.
 
-1. Per creare un ambiente conda con i pacchetti necessari eseguire il comando <\br>
-	`make requirements` <\br>
-   Questo crea un ambiente chiamato `DS_2022`. Attivarlo con <\br>
-   	`conda activate DS_2022` <\br>
+1. Per creare un ambiente conda con i pacchetti necessari eseguire il comando <br>
+	`make requirements` <br>
+   Questo crea un ambiente chiamato `DS_2022`. Attivarlo con <br>
+   	`conda activate DS_2022` <br>
    	
 2. Eseguire `make data` per generare diversi file nel formato .pkl che contengono diversi dataframe 
     contenenti dati di meteo, consumi e inquinamento, separati. Vengono salvati nella cartella data/interim.
    Una volta creati, essi possono essere velocemente importati eseguendo
    	`from trentodatalib import meteo, consumi, inquinamento` nello script python dove si vogliono usare.
 
-2. Poi si possono creare i dataset per la classificazione e per la regressione eseguendo <\br>
-	`make features` <\br>
+2. Poi si possono creare i dataset per la classificazione e per la regressione eseguendo <br>
+	`make features` <br>
    Questo crea i dataset desiderati e pronti per il training nella cartella data/processed, sempre nel formato .pkl
    
 3. Una volta creati tutti i dataset la visualizzazione dei risultati, in un notebook o in una console iPython, si possono importare i moduli contenuti in src/visualization ed eseguire le funzioni che sono contenute in essi. In particolare:
@@ -80,8 +80,8 @@ Clonare la repository ed eseguire i seguenti comandi su terminale bash. È neces
 	+ classificazione.py contiene funzioni per plot delle matrici di confusione dei classificatori
 	+ plotregression.py esegue regressione lineare diverse volte variando il numero di features e visualizza i risultati.
 
-4. Per allenare i modelli relativi a classificazione e regressione eseguire <\br>
-	`make train` <\br>
+4. Per allenare i modelli relativi a classificazione e regressione eseguire <br>
+	`make train` <br>
    I modelli ricavati in questo training vengono esportati nel formato .joblib nella cartella ./models
 
 5. Una breve presentazione del progetto è disponibile in notebooks/Presentazione.ipynb
