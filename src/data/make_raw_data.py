@@ -1,3 +1,5 @@
+#questo script scarica automaticamente i dati necessari per il progetto e li inserisce nella cartella data/raw
+#Il link alla pagina dove sono disponibili è https://dataverse.harvard.edu/dataverse/bigdatachallenge
 import requests
 import os
 
@@ -23,6 +25,6 @@ URL_DEC = "https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/AMKZXM/14d3317fbc2-066
 downloadData("SET-dec-2013.csv", URL_DEC)
 
 URL_NOV = "https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/AMKZXM/14d33181012-6906e37f0157?response-content-disposition=attachment; filename*=UTF-8''SET-nov-2013.csv&response-content-type=text/plain; charset=US-ASCII&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220724T201251Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A/20220724/us-east-1/s3/aws4_request&X-Amz-Signature=6c401ffe8429a868650191c2fcb23fa980e2395217728e2da6c21b9620eb08c2"
-downloadData("SET-dec-2013.csv", URL_DEC)
+downloadData("SET-nov-2013.csv", URL_DEC)
 
 print("Dati raw importati correttamente da Harvard Dataverse!")
