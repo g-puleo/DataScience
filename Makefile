@@ -24,7 +24,6 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
 ## Download dei dati raw
-
 raw_data: 
 	$(PYTHON_INTERPRETER) src/data/make_raw_data.py
 	
