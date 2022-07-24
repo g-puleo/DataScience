@@ -1,1 +1,0 @@
-{"features": ["consumoOrarioUbicazione_x", "meanTemperature_x", "precipitations_x", "meanTemperature_x+1", "precipitations_x+1"], "target": "FASCIA_CONSUMI_x+1"}
