@@ -37,8 +37,8 @@ features:
 
 ## Training di classificatori e regressori
 train: 
-	$(PYTHON_INTERPRETER) src/model/train_model_classification.py
-	$(PYTHON_INTERPRETER) src/model/train_model_regression.py
+	$(PYTHON_INTERPRETER) src/models/train_model_classification.py
+	$(PYTHON_INTERPRETER) src/models/train_model_regression.py
 
 ## Cancella tutti i file python compilati
 clean:
