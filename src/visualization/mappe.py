@@ -6,7 +6,7 @@ import numpy as np
 from datetime import time, timedelta, datetime, date 
 import contextily as cx
 import matplotlib.pyplot as plt
-
+import matplotlib as mpl 
 from trentodatalib import meteo, consumi, inquinamento
 from trentodatalib import funzioni as fz
 from trentodatalib import rawdatabase as rawdata
@@ -96,6 +96,7 @@ def plot_mappa_diff_wknd():
 def plot_mappa_stazioni():
 	
 	fig, axmappastazioni = plt.subplots(1, 2, figsize=(14,7))
+
 	for ii in range(2):
 		meteo.df_mappa_stazioni.plot(color='blue', ax=axmappastazioni[ii]) 
 		cx.add_basemap(axmappastazioni[ii], crs=meteo.df_mappa_stazioni.crs.to_string() ) 
@@ -104,8 +105,32 @@ def plot_mappa_stazioni():
 
 	axmappastazioni[1].set_xlim(11.0, 11.3)
 	axmappastazioni[1].set_ylim(45.9, 46.2)
-	axmappastazioni[1].annotate('Trento Laste', (11.13565, 46.08))
-	axmappastazioni[1].annotate('Roncafort', (11.10131, 46.10))
+	axmappastazioni[1].annotate('Trento Laste', (11.13565, 46.08), fontsize=12)
+	axmappastazioni[1].annotate('Roncafort', (11.10131, 46.10), fontsize=12)
 	plt.show()
 	return
 
+
+
+def plot_suddivisione_regioni():
+
+	#fig, ax = plt.subplots(1,1)
+
+
+	df_staz=meteo.df_mappa_stazioni
+	df_reg = meteo.gdfLineCells
+	df_staz.to_crs(epsg=4326, inplace=True)
+	df_reg.to_crs(epsg=4326, inplace=True)
+	#mappo le stazioni in diversi colori secondo una colormap di matplotlib
+	stazioni = pd.unique(df_reg['nearestStation'])
+	colori = list(mpl.cm.get_cmap('viridis', len(stazioni)).colors)
+	colorihex = [mpl.colors.to_hex(colori[ii]) for ii in range(len(colori))]
+	np.random.shuffle(colorihex)
+	dict_colori_stazioni = dict(zip(stazioni, colorihex))
+	df_reg['colore'] = df_reg['nearestStation'].replace(dict_colori_stazioni)
+	ax1 = df_reg.plot(color=df_reg['colore'], alpha=0.7)
+	cx.add_basemap(ax1, crs=df_reg.crs.to_string() ) 
+	df_staz.plot(ax=ax1, color='blue')
+	plt.show()
+	
+	return
