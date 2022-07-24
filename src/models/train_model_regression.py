@@ -61,7 +61,8 @@ def regressioneridgeCV( df_in, feat, targ):
 	return lcv
 # funzione che salva i modelli
 def savemodel( model, namemodel):
-	filename = '../../models/modelreg_'+namemodel+'.sav'
+	fn =  '../../models/modelreg_'+namemodel+'.sav'
+	filename = os.path.join( os.path.dirname(__file__), fn ) 
 	dump(model, filename)
 
 
