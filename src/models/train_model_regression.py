@@ -18,10 +18,10 @@ from joblib import dump, load
 
 # devo importare i database della zona di Trento dalla cartella data processed
 
-df_giornoTN= pd.read_pickle( os.path.join(os.path.dirname(__file__),"../../data/processed/datiregrcomuneday.pkl"))
-df_seraTN = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiregrcomuneev.pkl"))
-df_giornoprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiregrprovday.pkl"))
-df_seraprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiregrprovev.pkl"))
+df_giornoTN= pd.read_pickle( os.path.join(os.path.dirname(__file__),"../../data/processed/datiRegrComuneday.pkl"))
+df_seraTN = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiRegrComuneEv.pkl"))
+df_giornoprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiRegrProvDay.pkl"))
+df_seraprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiRegrProvEv.pkl"))
 
 #funzione che effettua la regressione lineare 
 def regressioneLineare( df_in, feat, targ): 
