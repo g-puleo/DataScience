@@ -32,12 +32,16 @@ def plot_mappa_consumi_lordi():
 	gdf_consumi_lordi = fz.genera_mappa_consumi(rawdata.df_consumiraw, rawdata.df_lineeraw, grid) 
 	MAX = gdf_consumi_lordi['consumo_per_cella'].max()
 	MIN = gdf_consumi_lordi['consumo_per_cella'].min()
-	ax_consumi_lordi = gdf_consumi_lordi.plot('consumo_per_cella', cmap='YlOrRd', alpha=0.5) 
-	cx.add_basemap(ax_consumi_lordi, crs=grid.crs.to_string() )
-	plt.colorbar(plt.cm.ScalarMappable( norm=ax_consumi_lordi._children[0].norm , cmap='YlOrRd'), ax=ax_consumi_lordi )
+	norm= plt.Normalize( MIN, MAX )
+	fig, ax_consumi_lordi = plt.subplots(1, 2, figsize=(14,7))
+	for ii in range(2):
+		gdf_consumi_lordi.plot('consumo_per_cella', cmap='YlOrRd', alpha=0.5, ax = ax_consumi_lordi[ii] ) 
+		cx.add_basemap(ax_consumi_lordi[ii], crs=grid.crs.to_string() )
+		plt.colorbar(plt.cm.ScalarMappable( norm=ax_consumi_lordi[ii]._children[0].norm , cmap='YlOrRd'), ax= ax_consumi_lordi[ii])
+		#plt.colorbar(plt.cm.ScalarMappable( norm=ax_consumi_lordi[ii].norm , cmap='YlOrRd'), ax=ax_consumi_lordi )
 	#zoom sull'area di trento
-	ax_consumi_lordi.set_xlim(11.05, 11.20)
-	ax_consumi_lordi.set_ylim(46.0, 46.15)
+	ax_consumi_lordi[1].set_xlim(11.05, 11.20)
+	ax_consumi_lordi[1].set_ylim(46.0, 46.15)
 	plt.show()
 	return
 	#plt.savefig("mappaConsumi1.pdf", bbox_inches='tight' , dpi=300)
@@ -83,7 +87,7 @@ def plot_mappa_diff_wknd():
 	df_mappa_diff2['consumo_per_cella'] = df_mappa_settimana['consumo_per_cella']-df_mappa_weekend['consumo_per_cella']
 	MAX = np.max(np.abs(df_mappa_diff2['consumo_per_cella'] )  ) 
 	norm= plt.Normalize( -MAX, MAX )
-	axs_diff2 = df_mappa_diff2.plot('consumo_per_cella', cmap='bwr', alpha=0.5, norm=norm) 
+	axs_diff2 = df_mappa_diff2.plot('consumo_per_cella', cmap='bwr', alpha=0.5, norm=norm,figsize=(12,5)) 
 	cx.add_basemap(axs_diff2, crs=grid.crs.to_string() )
 
 	plt.colorbar(plt.cm.ScalarMappable( norm=axs_diff2._children[0].norm , cmap='bwr'), ax=axs_diff2 )
@@ -114,11 +118,11 @@ def plot_mappa_stazioni():
 
 
 
-def plot_suddivisione_regioni(luogo='regione'):
+def plot_suddivisione_regioni(luogo='provincia'):
 
 	#alpha, trasparenza dei plot
 	aph = 0.2
-	if luogo not in ['regione', 'comune']:
+	if luogo not in ['provincia', 'comune']:
 		print("Inserire 'regione' o 'comune' come argomento alla funzione.")
 
 
@@ -138,7 +142,7 @@ def plot_suddivisione_regioni(luogo='regione'):
 	
 	
 	if luogo == 'provincia':
-		ax1 = df_reg.plot(color=df_reg['colore'], alpha=aph)
+		ax1 = df_reg.plot(color=df_reg['colore'], alpha=aph, figsize = (14, 7))
 		df_staz.plot(ax=ax1, color='blue')
 
 
@@ -150,7 +154,7 @@ def plot_suddivisione_regioni(luogo='regione'):
 		df2['colore'] = '#0000ff' #blu in hex
 
 		dftoplot = pd.concat([df1, df2])
-		ax1 = dftoplot.plot(color=dftoplot['colore'], alpha=aph)
+		ax1 = dftoplot.plot(color=dftoplot['colore'], alpha=aph, figsize = (14,7))
 		df_staz[(df_staz['station']=='T0129') | (df_staz['station']=='T0135')].plot(ax=ax1, color='blue')
 		ax1.set_xlim(11.0, 11.3)
 		ax1.set_ylim(45.9, 46.2)
