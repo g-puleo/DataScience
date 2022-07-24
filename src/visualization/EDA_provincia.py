@@ -50,7 +50,7 @@ def corrMatrix():
        return
 
 def corrPlots():
-       gr = sns.pairplot(dfFasceOrarie[0], vars=["T media", "consumo", "(A) NO2", "(A) O3"])
+       gr = sns.pairplot(dfFasceOrarie[0], vars=["T media", "consumo", "(A) NO2", "(A) O3"], height=1.5)
        
        plt.show()
        return

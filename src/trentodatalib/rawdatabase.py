@@ -82,7 +82,6 @@ gridraw.drop(columns=['type', 'properties'], inplace=True)
 
 dati_comuni = gpd.read_file(current_path/ tpath.ext_data_path / tpath.filenames['comuni'] )
 #dati_province = gpd.read_file(current_path/ tpath.ext_data_path / files['province'] )
-
 gdf_comuniTN = dati_comuni[ dati_comuni['COD_PROV'] == 22 ].reset_index(drop=True)
-#gdf_comuniTNraw.crs
+#gdf_comuniTN.crs
 

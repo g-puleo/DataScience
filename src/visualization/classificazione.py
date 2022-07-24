@@ -73,7 +73,7 @@ def confMat(classifier_name = "RF", subset="train"):
 		cmat = confusion_matrix( ypredicted, Y[ii])
 		sns.heatmap(cmat, cmap=plt.cm.Greens, ax=axs[ii], annot=True)
 		axs[ii].set_title(fasce[ii])
-		print(f"Lo score sui dati della fascia oraria {fasce[ii]} è {clf[ii].score(X[ii], Y[ii])}.")
+		print(f"Lo score sui dati della fascia oraria {fasce[ii]} è {round(clf[ii].score(X[ii],Y[ii]),2)}")
 
 	fig.suptitle(f"Matrici di confusione classificatore {classifier_name} su insieme {subset}")
 	
