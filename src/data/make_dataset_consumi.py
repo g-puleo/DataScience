@@ -26,6 +26,9 @@ df_consumi = rawdata.df_consumiraw.copy()
 
 # A questo punto del codice genero i database dei consumi lordi riguardanti i consumi diurni e notturni che mi serviranno per fare considerazioni su eventuali variazioni fra giorno e notte 
 
+#converto gli ampere in kWH usando il voltaggio delle linee di media tensione (20kV)
+#moltiplico anche per  DT = 1ora/6 = 10 min ( infatti E[kWH] = I [A] x V[kV] x DT[ore])
+df_consumi['consumi']*=20/6 
 # divisione della colonna time in data e ora
 df_consumi[['giorno','ora']] = df_consumi.time.str.split(" ",expand=True)
 df_consumi.time = df_consumi.time.apply(datetime.fromisoformat)

@@ -21,7 +21,7 @@ def histplotconsumi():
     quartiles_A = [] 
     quartiles_B = []
     ylims = [0,21]
-    xlims = [0.2,0.8]
+    xlims = [0.7,2.7]
     fs = 11
     station_names = ["Zona Laste", "Zona Roncafort"]
 
@@ -48,7 +48,7 @@ def histplotconsumi():
 
     for kk in range(2):
         if kk==1:
-            axs_hist[kk].set_xlabel('consumo orario per ubicazione (ampere)', fontsize=fs)
+            axs_hist[kk].set_xlabel('consumo orario per ubicazione (kWh)', fontsize=fs)
         axs_hist[kk].set_ylabel('N. giorni', fontsize=fs)
         axs_hist[kk].grid(visible='True')
         axs_hist[kk].legend(fontsize=fs, loc='upper left')
@@ -82,8 +82,6 @@ def edaConsumiZoneTrento(mode="corr"):
         figmatB, axs_corr_matB = plt.subplots(1,2, figsize=(14,6))
         figmat = [figmatA, figmatB]
         axs_corr_mat = [axs_corr_matA, axs_corr_matB]
-
-
 
     if mode == "season":
         fig_stagione = plt.figure()

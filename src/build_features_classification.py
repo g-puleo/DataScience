@@ -84,8 +84,7 @@ dfTrentoZoneDay.to_pickle(os.path.join(os.path.dirname(__file__),"../data/proces
 dfTrentoZoneEv.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiTrentoEv.pkl"))
 dfTrentoZoneNight.to_pickle(os.path.join(os.path.dirname(__file__),"../data/processed/datiTrentoNight.pkl"))
 
-#salvo anche il df_meteo_consumi perché sarà unito ai dati dell'inquinamento per fare la regressione.
+#salvo anche il df_meteo_consumi perché sarà unito ai dati dell'inquinamento per fare la regressione
 df_meteo_consumi.to_pickle(os.path.join(os.path.dirname(__file__),"../data/interim/datimeteoconsumi.pkl"))
 
-print(dfTrentoZoneDay.head())
-
+print("Creazione dei dataset per la classificazione riuscita!")

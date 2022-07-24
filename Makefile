@@ -28,7 +28,14 @@ data:
 	$(PYTHON_INTERPRETER) src/data/make_dataset_consumi.py
 	$(PYTHON_INTERPRETER) src/data/make_dataset_meteo.py
 	$(PYTHON_INTERPRETER) src/data/make_dataset_inquinamento.py
-	
+
+features:
+	$(PYTHON_INTERPRETER) src/build_features_classification.py
+	$(PYTHON_INTERPRETER) src/build_features_regression.py
+
+train: 
+	$(PYTHON_INTERPRETER) src/model/train_model_classification.py
+	$(PYTHON_INTERPRETER) src/model/train_model_regression.py
 ## Delete all compiled Python files
 clean:
 	find . -type f -name "*.py[co]" -delete

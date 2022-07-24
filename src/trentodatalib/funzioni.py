@@ -153,3 +153,10 @@ def regressioneLineare( df_in, feat, targ, talk=False ) :
     return (trainScore, testScore)
 
 
+
+def exportTrainTestSplit(  Xtrain, Xtest, path ):
+    '''After splitting data into train and test, save the indices corresponding to train and test separately
+    into two csv files. path is the path of the output file including the (first part of its) name'''
+    print(f"Saving the following series to Xtrain csv file {Xtrain.index.to_series()} ")
+    Xtrain.index.to_series().to_csv(path + "_train.csv")
+    Xtest.index.to_series().to_csv(path + "_test.csv")

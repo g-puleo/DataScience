@@ -78,7 +78,7 @@ df_mappa_stazioni = gpd.GeoDataFrame(df_mappa_stazioni, crs='EPSG:4326')
 df_mappa_stazioni = df_mappa_stazioni.drop_duplicates().reset_index().drop(columns='index')
 
 gdfLineCells = pd.merge(left=rawdata.gridraw, right=consumi.df_linee, left_on='id', right_on='SQUAREID', how='right').drop(columns='id')
-gdfLineCells[['geometry', 'SQUAREID']].drop_duplicates().reset_index(drop=True)
+gdfLineCells[['geometry', 'SQUAREID']].drop_duplicates().reset_index().drop(columns='index')
 
 gdfLineCells.to_crs(epsg=3035, inplace=True)
 df_mappa_stazioni.to_crs(epsg=3035, inplace=True)
