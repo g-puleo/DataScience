@@ -46,7 +46,8 @@ def plotregr():
 
 	# per uno dei modelli si può vedere come cambia lo score di test e train al variare delle features 
 	# attenzione c'è un inquinante ( 'Parco S. Chiara PM10_x') che un giorno ha un Nan non inserire quello nella featuresList
-	featuresList = [ 'consumoOrarioUbicazionemean_x','meanTemperaturemean_x', 'precipitationsmean_x', 'meanTemperaturemean_x+1', 'precipitationsmean_x+1','Parco S. Chiara PM2.5_x','Parco S. Chiara Biossido Zolfo_x']
+	featuresList = [ 'consumoOrarioUbicazionemean_x','meanTemperaturemean_x', 'precipitationsmean_x', 'meanTemperaturemean_x+1', 'precipitationsmean_x+1','Parco S. Chiara PM2.5_x','Parco S. Chiara Biossido Zolfo_x', 'Parco S. Chiara PM2.5_x+1','Parco S. Chiara Biossido Zolfo_x+1', 'Borgo Valsugana PM10_x', 'Borgo Valsugana PM2.5_x','Borgo Valsugana PM10_x+1', 'Borgo Valsugana PM2.5_x+1','Via Bolzano Biossido di Azoto_x'
+	  ]
 
 	N = len(featuresList) 
 	ygTest = np.zeros( (N,)  ) 
