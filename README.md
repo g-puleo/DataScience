@@ -9,12 +9,12 @@ Relativo all'esame del corso "Introduzione alla Data Science per fisici" dell'Un
 Clonare la repository ed eseguire i seguenti comandi su terminale bash. È necessario aver installato conda.
 
 1. Per creare un ambiente conda con i pacchetti necessari eseguire il comando
-		make requirements
+	make requirements
    Questo crea un ambiente chiamato `DS_2022`. Attivarlo con
-		conda activate DS_2022
+	conda activate DS_2022
    	
 2. Eseguire 
-		make data
+	make data
 per generare diversi file nel formato .pkl che contengono diversi dataframe 
 relativi dati di meteo, consumi e inquinamento, separati. Vengono salvati nella cartella `data/interim`.
 Una volta creati, essi possono essere velocemente importati eseguendo
