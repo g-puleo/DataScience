@@ -126,7 +126,9 @@ Clonare la repository ed eseguire i seguenti comandi su terminale bash. È neces
 
 		conda install -c conda-forge libiconv
 
-+ `notebooks` Contiene una breve presentazione del progetto con diversi grafici per visualizzare i risultati.
++ `notebooks` Contiene una breve presentazione del progetto con diversi grafici per visualizzare i risultati. Per visualizzare la presentazione, eseguire
+
+	jupyter nbconvert Presentazione.ipynb  --to slides --post serve
 
 
 <p><small>Repository basata sul template <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project</a>. #cookiecutterdatascience</small></p>
