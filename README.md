@@ -3,6 +3,7 @@ Consumi Elettrici del Trentino
 
 Progetto sull'analisi dati dei consumi elettrici della provincia di Trento e del comune di Trento.
 Relativo all'esame del corso "Introduzione alla Data Science per fisici" dell'Università di Trento.
+Autori del progetto: Anna Saiani, Gianmarco Puleo
 
 ## Riproduzione dei risultati
 
@@ -28,24 +29,24 @@ Una volta creati, essi possono essere velocemente importati eseguendo
 		
 nello script python dove si vogliono usare.
 
-2. Poi si possono creare i dataset per la classificazione e per la regressione eseguendo
+3. Poi si possono creare i dataset per la classificazione e per la regressione eseguendo
 
 		make features
 
    Questo crea i dataset desiderati e pronti per il training nella cartella `data/processed`, sempre nel formato .pkl
    
-3. Una volta creati tutti i dataset la visualizzazione dei risultati, in un notebook o in una console iPython, si possono importare i moduli contenuti in src/visualization ed eseguire le funzioni che sono contenute in essi. In particolare:
-	+ EDA_Trento.py contiene due funzioni che plottano analisi dei consumi nelle due zone in cui è suddiviso trento
-	+ EDA_Provincia.py mostra le correlazioni tra dati di meteo, consumi, inquinamento, su tutta la provincia.
-	+ mappe.py contiene varie funzioni per il plot di mappe
-	+ classificazione.py contiene funzioni per plot delle matrici di confusione dei classificatori
-	+ plotregression.py esegue regressione lineare diverse volte variando il numero di features e visualizza i risultati.
+4. Una volta creati tutti i dataset si possono visualizzare i risultati, in un notebook o in una console iPython si possono importare i moduli contenuti in `src/visualization` ed eseguire le funzioni che sono contenute in essi. In particolare:
+	+ `EDA_Trento.py` contiene due funzioni che plottano analisi dei consumi nelle due zone in cui è suddiviso trento
+	+ `EDA_Provincia.py `mostra le correlazioni tra dati di meteo, consumi, inquinamento, su tutta la provincia.
+	+ `mappe.py` contiene varie funzioni per il plot di mappe
+	+ `classificazione.py` contiene funzioni per plot delle matrici di confusione dei classificatori
+	+ `plotregression.py` esegue regressione lineare diverse volte variando il numero di features e visualizza i risultati.
 
-4. Per allenare i modelli relativi a classificazione e regressione eseguire
+5. Per allenare i modelli relativi a classificazione e regressione eseguire
 
 		make train
 		
-   I modelli ricavati in questo training vengono esportati nel formato joblib nella cartella ./models
+   I modelli ricavati in questo training vengono esportati nel formato joblib nella cartella `./models`
 
 ## Repo structure
 ```
@@ -123,7 +124,7 @@ nello script python dove si vogliono usare.
 	4. `/trentodatalib` è una libreria capace di importare facilmente i dataframe preparati con `make data` in uno script python.
 	5. `/visualization` contiene diversi script per la visualizzazione di alcuni risultati
 
-**NB**: Per l'esecuzione di alcuni codici in `/visualization` è necessario il pacchetto `contextily`. Esso richiede una connessione a internet attiva per il download delle mappe. Il pacchetto è presente nella conda image ma richiede anche altre librerie. Potrebbe essere necessario installare nel conda environment DS_2022 anche:
+**NB**: Per l'esecuzione di alcuni codici in `/visualization` è necessario il pacchetto python `contextily`. Esso richiede una connessione a internet attiva per il download delle mappe al momento dell'esecuzione dei codici. Il pacchetto è presente nella conda image ma richiede anche altre librerie di sistema e potrebbe generare errori di tipo `ImportError`. Potrebbe essere necessario installare nel conda environment DS_2022 anche:
 
 		conda install -c conda-forge libiconv
 
