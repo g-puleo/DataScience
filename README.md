@@ -65,7 +65,7 @@ Clonare la repository ed eseguire i seguenti comandi su terminale bash. È neces
 │       ├── SET-dec-2013.csv
 │       ├── SET-nov-2013.csv
 │       └── trentino-grid.geojson
-├── DS_2022.yml  <-- conda image to reproduce result
+├── DS_2022.yml  <-- conda image to reproduce results
 ├── LICENSE
 ├── Makefile
 ├── models
@@ -94,7 +94,6 @@ Clonare la repository ed eseguire i seguenti comandi su terminale bash. È neces
 │   │   ├── inquinamento.py
 │   │   ├── meteo.py
 │   │   ├── rawdatabase.py
-│   │   ├── readme.txt
 │   │   └── trentopaths.py
 │   └── visualization
 │       ├── classificazione.py
