@@ -1,10 +1,15 @@
 #questo file è una libreria di funzioni utili 
 import pandas as pd
 from datetime import time, date, datetime 
-
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 
 def genera_mappa_consumi( datiConsumi, df_linee, grid ):
-    ''' Restituisce GeoDataFrame per il plot di una mappa in scala di colore a partire dai dati relativi ai consumi.
+    ''' Restituisce GeoDataFra
+
+    me per il plot di una mappa in scala di colore a partire dai dati relativi ai consumi.
         Inputs:
             
             datiConsumi:pd.DataFrame che contiene colonna con i codici di linea (LINESET) e i rispettivi consumi

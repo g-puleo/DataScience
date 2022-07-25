@@ -19,8 +19,8 @@ from joblib import dump, load
 
 
 def plotregr(): 
-	df_giornoprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiregrprovday.pkl"))
-	df_seraprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiregrprovev.pkl"))
+	df_giornoprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiRegrProvDay.pkl"))
+	df_seraprov = pd.read_pickle(os.path.join(os.path.dirname(__file__),"../../data/processed/datiRegrProvEv.pkl"))
 
 	# queste sono tutte le colonne che si hanno a disposizione per le features
 	'''['Parco S. Chiara PM10_x', 'Parco S. Chiara PM2.5_x',

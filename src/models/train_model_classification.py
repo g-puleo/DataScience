@@ -62,7 +62,7 @@ def trainRF():
 
 	#voglio usare gridsearchCV per ottimizzare gli iperparametri nell'insieme definito da questa griglia
 	maxfeat = [i for i in range(1,Nfeatures+1)]
-	param_grid = {'n_estimators':[100, 200], 'max_depth':[10,50, 100], 'max_features':maxfeat}
+	param_grid = {'n_estimators':[100,150], 'max_depth':[3,5, 10], 'max_features':maxfeat}
 	#inizializzo un oggetto gridSearch per la ricerca dei migliori parametri con CV
 	gs_CV = GridSearchCV(estimator=rfc, param_grid=param_grid)
 
@@ -76,7 +76,7 @@ def trainRF():
 
 
 def trainMLP():
-	hls = (16,16)
+	hls = (8,6)
 	print(f"Alleno rete neurale di {len(hls)} layer. \nIl numero di neuroni in ogni layer è, in ordine:\n{hls}")
 	NNW = MLPClassifier(hidden_layer_sizes=hls, solver='sgd' ) 
 	
