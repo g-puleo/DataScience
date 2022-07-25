@@ -33,7 +33,66 @@ Clonare la repository ed eseguire i seguenti comandi su terminale bash. È neces
 	`make train` <br>
    I modelli ricavati in questo training vengono esportati nel formato .joblib nella cartella ./models
 
-5. Una breve presentazione del progetto è disponibile in notebooks/Presentazione.ipynb
+## Repo structure
+```
+.
+├── data
+│   ├── external 
+│   │   ├── APPA_inquinamento_aria_Nov_Dec_2013.csv
+│   │   ├── Com01012013_WGS84.cpg
+│   │   ├── Com01012013_WGS84.dbf
+│   │   ├── Com01012013_WGS84.prj
+│   │   ├── Com01012013_WGS84.shp
+│   │   └── Com01012013_WGS84.shx
+│   ├── interim
+│   ├── processed
+│   └── raw
+│       ├── line.csv
+│       ├── meteotrentino-weather-station-data.json
+│       ├── SET-dec-2013.csv
+│       ├── SET-nov-2013.csv
+│       └── trentino-grid.geojson
+├── DS_2022.yml  <-- conda image to reproduce result
+├── LICENSE
+├── Makefile
+├── models
+├── notebooks
+│   ├── PresentazioneEDA.ipynb
+│   ├── PresentazioneEDA.slides.html
+├── requirements.txt
+├── setup.py
+├── src
+│   ├── build_features_classification.py
+│   ├── build_features_regression.py
+│   ├── data
+│   │   ├── make_dataset_consumi.py
+│   │   ├── make_dataset_inquinamento.py
+│   │   ├── make_dataset_meteo.py
+│   │   └── make_raw_data.py
+│   ├── models
+│   │   ├── predict_Model_Regression.py
+│   │   ├── train_model_classification.py
+│   │   └── train_model_regression.py
+│   ├── plotmappastazioni.py
+│   ├── trentodatalib
+│   │   ├── consumi.py
+│   │   ├── funzioni.py
+│   │   ├── __init__.py
+│   │   ├── inquinamento.py
+│   │   ├── meteo.py
+│   │   ├── rawdatabase.py
+│   │   ├── readme.txt
+│   │   └── trentopaths.py
+│   └── visualization
+│       ├── classificazione.py
+│       ├── EDA_provincia.py
+│       ├── EDA_Trento.py
+│       ├── __init__.py
+│       ├── mappe.py
+│       └── plotregression.py
+└── test_environment.py
+```
+
 
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
