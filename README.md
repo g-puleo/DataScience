@@ -9,44 +9,42 @@ Autori del progetto: Anna Saiani, Gianmarco Puleo
 
 Clonare la repository ed eseguire i seguenti comandi su terminale bash. È necessario aver installato conda.
 
-1. Per creare un ambiente conda con i pacchetti necessari eseguire il comando
+1. 	Per creare un ambiente conda con i pacchetti necessari eseguire il comando
 
 		make requirements
 		
-   Questo crea un ambiente chiamato `DS_2022`. Attivarlo con
+   	Questo crea un ambiente chiamato `DS_2022`. Attivarlo con
    
 		conda activate DS_2022
    	
-2. Eseguire 
+2. 	Eseguire 
 
 		make data
 	
-per generare diversi file nel formato .pkl che contengono diversi dataframe 
-relativi dati di meteo, consumi e inquinamento, separati. Vengono salvati nella cartella `data/interim`.
-Una volta creati, essi possono essere velocemente importati eseguendo
+	per generare diversi file nel formato .pkl che contengono diversi dataframe relativi dati di meteo, consumi e inquinamento, separati. Vengono salvati nella cartella `data/interim`. Una volta creati, essi possono essere velocemente importati eseguendo
 
 		from trentodatalib import meteo, consumi, inquinamento
 		
-nello script python dove si vogliono usare.
+	nello script python dove si vogliono usare.
 
-3. Poi si possono creare i dataset per la classificazione e per la regressione eseguendo
+3. 	Poi si possono creare i dataset per la classificazione e per la regressione eseguendo
 
 		make features
 
-   Questo crea i dataset desiderati e pronti per il training nella cartella `data/processed`, sempre nel formato .pkl
+ 	Questo crea i dataset desiderati e pronti per il training nella cartella `data/processed`, sempre nel formato .pkl
    
-4. Una volta creati tutti i dataset si possono visualizzare i risultati, in un notebook o in una console iPython si possono importare i moduli contenuti in `src/visualization` ed eseguire le funzioni che sono contenute in essi. In particolare:
+4. 	Una volta creati tutti i dataset si possono visualizzare i risultati, in un notebook o in una console iPython si possono importare i moduli contenuti in `src/visualization` ed eseguire le funzioni che sono contenute in essi. In particolare:
 	+ `EDA_Trento.py` contiene due funzioni che plottano analisi dei consumi nelle due zone in cui è suddiviso trento
-	+ `EDA_Provincia.py `mostra le correlazioni tra dati di meteo, consumi, inquinamento, su tutta la provincia.
+	+ `EDA_Provincia.py` mostra le correlazioni tra dati di meteo, consumi, inquinamento, su tutta la provincia.
 	+ `mappe.py` contiene varie funzioni per il plot di mappe
 	+ `classificazione.py` contiene funzioni per plot delle matrici di confusione dei classificatori
 	+ `plotregression.py` esegue regressione lineare diverse volte variando il numero di features e visualizza i risultati.
 
-5. Per allenare i modelli relativi a classificazione e regressione eseguire
+5. 	Per allenare i modelli relativi a classificazione e regressione eseguire
 
 		make train
 		
-   I modelli ricavati in questo training vengono esportati nel formato joblib nella cartella `./models`
+   	I modelli ricavati in questo training vengono esportati nel formato joblib nella cartella `./models`
 
 ## Repo structure
 ```
