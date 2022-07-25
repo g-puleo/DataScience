@@ -15,7 +15,7 @@ dfFasceOrarie = [dfTrentoZoneDay, dfTrentoZoneEv, dfTrentoZoneNight]
 
 ########## visuaizzazione della divisione in categorie di consumi in alto medio basso usando i quartili ###########
 def histplotconsumi():
-    fig, axs_hist = plt.subplots(2,1, figsize=(9,14))
+    fig, axs_hist = plt.subplots(2,1, figsize=(12,7))
     fasce = ['giorno (08:00-19:00)', 'sera (19:00-24:00)', 'notte (00:00-08:00)']
     colors=['skyblue', 'mediumblue', '#000013']
     quartiles_A = [] 
@@ -78,13 +78,13 @@ def edaConsumiZoneTrento(mode="corr"):
     station_names = ["Laste", "Roncafort"]
 
     if mode == "corr":
-        figmatA, axs_corr_matA = plt.subplots(1,2, figsize=(14,6))
-        figmatB, axs_corr_matB = plt.subplots(1,2, figsize=(14,6))
+        figmatA, axs_corr_matA = plt.subplots(1,2, figsize=(11,2.7))
+        figmatB, axs_corr_matB = plt.subplots(1,2, figsize=(11,2.7))
         figmat = [figmatA, figmatB]
         axs_corr_mat = [axs_corr_matA, axs_corr_matB]
 
     if mode == "season":
-        fig_stagione = plt.figure()
+        fig_stagione = plt.figure(figsize=(12,7))
         ax_stagione = plt.axes()
     
     for jj, station in enumerate(stations):
