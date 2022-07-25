@@ -13,18 +13,25 @@ Clonare la repository ed eseguire i seguenti comandi su terminale bash. È neces
 		make requirements
 		
    Questo crea un ambiente chiamato `DS_2022`. Attivarlo con
-	conda activate DS_2022
+   
+		conda activate DS_2022
    	
 2. Eseguire 
-	make data
+
+		make data
+	
 per generare diversi file nel formato .pkl che contengono diversi dataframe 
 relativi dati di meteo, consumi e inquinamento, separati. Vengono salvati nella cartella `data/interim`.
 Una volta creati, essi possono essere velocemente importati eseguendo
+
 		from trentodatalib import meteo, consumi, inquinamento
+		
 nello script python dove si vogliono usare.
 
 2. Poi si possono creare i dataset per la classificazione e per la regressione eseguendo
+
 		make features
+
    Questo crea i dataset desiderati e pronti per il training nella cartella `data/processed`, sempre nel formato .pkl
    
 3. Una volta creati tutti i dataset la visualizzazione dei risultati, in un notebook o in una console iPython, si possono importare i moduli contenuti in src/visualization ed eseguire le funzioni che sono contenute in essi. In particolare:
@@ -35,7 +42,9 @@ nello script python dove si vogliono usare.
 	+ plotregression.py esegue regressione lineare diverse volte variando il numero di features e visualizza i risultati.
 
 4. Per allenare i modelli relativi a classificazione e regressione eseguire
+
 		make train
+		
    I modelli ricavati in questo training vengono esportati nel formato joblib nella cartella ./models
 
 ## Repo structure
